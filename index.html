@@ -7,178 +7,154 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700;900&family=Orbitron:wght@400;700;900&display=swap');
 
-        body {
-            margin: 0; padding: 0; background-color: #000000; color: white;
-            font-family: 'Noto Sans KR', sans-serif; overflow: hidden;
-            touch-action: none; user-select: none; -webkit-user-select: none;
-        }
+        body { margin: 0; padding: 0; background-color: #000; color: white; font-family: 'Noto Sans KR', sans-serif; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; }
 
-        /* 🎬 제작사 시네마틱 인트로 */
-        #studioIntro {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #000; display: flex; justify-content: center; align-items: center;
-            z-index: 200; transition: opacity 1.5s ease-in-out;
-        }
-        .logo-text {
-            font-family: 'Orbitron', sans-serif; font-size: 5rem; font-weight: 400;
-            letter-spacing: 20px; opacity: 0; animation: cinematicReveal 5s ease-in-out forwards;
-        }
-        .t-white { color: #aaaaaa; transition: 2s; }
-        .t-e { color: #ffffff; text-shadow: 0 0 10px #fff, 0 0 30px #fff; font-weight: 900; }
-        .t-3 { color: #ffffff; text-shadow: 0 0 10px #fff, 0 0 30px #fff; font-weight: 900; }
-        @keyframes cinematicReveal {
-            0% { opacity: 0; transform: scale(0.9); filter: blur(15px); letter-spacing: 5px; }
-            30% { opacity: 1; filter: blur(0px); }
-            70% { opacity: 1; filter: blur(0px); letter-spacing: 25px; }
-            100% { opacity: 0; transform: scale(1.1); filter: blur(10px); letter-spacing: 30px; }
-        }
+        /* 🎬 제작사 인트로 */
+        #studioIntro { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; display: flex; justify-content: center; align-items: center; z-index: 200; transition: opacity 1s; }
+        .logo-text { font-family: 'Orbitron', sans-serif; font-size: 5rem; font-weight: 400; letter-spacing: 20px; opacity: 0; animation: cinematicReveal 4s ease-in-out forwards; }
+        .t-white { color: #aaa; } .t-e, .t-3 { color: #fff; text-shadow: 0 0 20px #fff; font-weight: 900; }
+        @keyframes cinematicReveal { 0% { opacity: 0; filter: blur(15px); letter-spacing: 5px; } 30% { opacity: 1; filter: blur(0px); } 70% { opacity: 1; letter-spacing: 25px; } 100% { opacity: 0; filter: blur(10px); letter-spacing: 30px; } }
 
         /* 🌌 메인 인트로 화면 */
-        #introScreen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000000;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 100; transition: opacity 0.5s;
-        }
-        .warp-active { animation: warpIn 1.2s cubic-bezier(0.7, 0, 0.3, 1) forwards !important; }
-        @keyframes warpIn {
-            0% { transform: scale(1); filter: blur(0px); opacity: 1; }
-            50% { filter: blur(3px); opacity: 0.8; }
-            100% { transform: scale(20); filter: blur(40px); opacity: 0; }
-        }
+        #introScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; transition: opacity 0.5s; }
+        .warp-active { animation: warpIn 1s forwards !important; }
+        @keyframes warpIn { 0% { transform: scale(1); filter: blur(0px); opacity: 1; } 100% { transform: scale(15); filter: blur(40px); opacity: 0; } }
 
-        .intro-title {
-            font-family: 'Orbitron', 'Noto Sans KR', sans-serif; font-size: 4.5rem; color: #ffffff;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5); margin-bottom: 20px;
-            animation: floatTitle 3s ease-in-out infinite;
-        }
+        .intro-title { font-family: 'Orbitron', sans-serif; font-size: 4.5rem; color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.5); margin-bottom: 20px; animation: floatTitle 3s infinite; }
         @keyframes floatTitle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         
         .diamond-display { font-size: 1.5rem; color: #00f3ff; margin-bottom: 30px; font-weight: 900; text-shadow: 0 0 15px #00f3ff; }
         
-        .menu-btns { display: flex; gap: 20px; }
-        .btn-enter, .btn-shop {
-            background: transparent; color: #ffffff; font-size: 1.5rem; font-weight: 900; padding: 15px 40px;
-            border: 2px solid #ffffff; border-radius: 5px; cursor: pointer; transition: 0.3s; letter-spacing: 3px;
-        }
-        .btn-enter:hover { background: #ffffff; color: #000; box-shadow: 0 0 30px #ffffff; }
-        .btn-shop { border-color: #ffd700; color: #ffd700; }
-        .btn-shop:hover { background: #ffd700; color: #000; box-shadow: 0 0 30px #ffd700; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: center; }
+        .btn-menu { background: #111; color: #fff; font-size: 1.2rem; font-weight: 900; padding: 15px 30px; border: 2px solid #fff; border-radius: 5px; cursor: pointer; transition: 0.3s; font-family: 'Orbitron', sans-serif; }
+        .btn-menu:hover { background: #fff; color: #000; box-shadow: 0 0 20px #fff; }
+        .btn-start { grid-column: 1 / 3; background: #00ff88; color: #000; border-color: #00ff88; font-size: 1.5rem; }
+        .btn-start:hover { background: #fff; box-shadow: 0 0 30px #00ff88; }
+        .btn-shop { border-color: #ffd700; color: #ffd700; } .btn-hangar { border-color: #00f3ff; color: #00f3ff; } .btn-pass { border-color: #ff0055; color: #ff0055; }
 
-        /* 🛒 상점 시스템 UI */
-        #shopModal {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9);
-            display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 150;
-        }
-        .shop-container {
-            background: #111; padding: 30px; border: 2px solid #00f3ff; border-radius: 10px;
-            width: 80%; max-width: 800px; text-align: center; max-height: 80vh; overflow-y: auto;
-        }
-        .shop-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
-        .shop-header h2 { color: #00f3ff; margin: 0; font-family: 'Orbitron', sans-serif; }
-        .close-shop { cursor: pointer; color: #fff; font-size: 1.5rem; font-weight: bold; }
-        .shop-section { margin-bottom: 30px; text-align: left; }
-        .shop-section h3 { color: #fff; border-left: 4px solid #00f3ff; padding-left: 10px; }
-        .items-grid { display: flex; gap: 15px; flex-wrap: wrap; }
-        .shop-item {
-            background: #000; border: 1px solid #444; padding: 15px; border-radius: 8px; width: calc(33% - 20px); min-width: 150px;
-            cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; justify-content: space-between;
-        }
-        .shop-item:hover { border-color: #00f3ff; box-shadow: 0 0 15px rgba(0,243,255,0.4); }
-        .item-name { color: #fff; font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; }
-        .item-desc { color: #888; font-size: 0.8rem; margin-bottom: 15px; }
-        .item-price { color: #ffd700; font-weight: bold; }
-        .btn-buy { background: #333; color: #fff; border: none; padding: 8px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
-        .btn-buy.equipped { background: #00f3ff; color: #000; }
+        /* 🛒 상점 & 격납고 & 패스 공통 모달 */
+        .full-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 150; }
+        .full-container { background: #0a0a0a; padding: 30px; border: 2px solid #fff; border-radius: 10px; width: 85%; max-width: 900px; max-height: 85vh; overflow-y: auto; position: relative; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
+        .modal-header h2 { margin: 0; font-family: 'Orbitron', sans-serif; }
+        .close-btn { cursor: pointer; color: #fff; font-size: 1.5rem; font-weight: bold; }
         
-        .gacha-box { border: 2px dashed #00ff88; padding: 20px; background: rgba(0,255,136,0.05); text-align: center; border-radius: 10px; }
-        .gacha-desc { font-size: 0.9rem; color: #aaa; margin-bottom: 10px; }
-        .btn-gacha { background: #00ff88; color: #000; border: none; padding: 12px 25px; font-weight: bold; font-size: 1.1rem; border-radius: 5px; cursor: pointer; transition: 0.2s; }
-        .btn-gacha:active { transform: scale(0.95); }
+        .items-grid { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; }
+        .item-card { background: #000; border: 1px solid #444; padding: 15px; border-radius: 8px; width: calc(33.3% - 20px); min-width: 180px; display: flex; flex-direction: column; justify-content: space-between; }
+        .item-name { color: #fff; font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; }
+        .item-desc { color: #888; font-size: 0.85rem; margin-bottom: 10px; height: 40px; }
+        .item-stat { font-size: 0.8rem; color: #aaa; background: #111; padding: 5px; margin-bottom: 10px; border-radius: 4px; }
+        .btn-action { background: #333; color: #fff; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
+        .btn-action.owned { background: #00f3ff; color: #000; }
+        .btn-action.equipped { background: #00ff88; color: #000; }
 
-        /* 🎮 인게임 UI (EXP Bar 포함) */
+        /* 시즌 패스 UI */
+        .pass-track { background: #111; border-radius: 10px; padding: 20px; border: 1px solid #333; }
+        .pass-progress { width: 100%; height: 10px; background: #222; border-radius: 5px; margin-bottom: 20px; overflow: hidden; position: relative; }
+        .pass-fill { height: 100%; background: linear-gradient(90deg, #ff0055, #ffd700); width: 0%; transition: 0.5s; }
+        .pass-tier { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #000; border: 1px solid #222; margin-bottom: 10px; border-radius: 5px; }
+        .pass-tier.unlocked { border-color: #ffd700; box-shadow: 0 0 10px rgba(255,215,0,0.2); }
+        .btn-claim { background: #555; color: #aaa; padding: 8px 15px; border: none; border-radius: 5px; font-weight: bold; cursor: not-allowed; }
+        .btn-claim.ready { background: #ffd700; color: #000; cursor: pointer; box-shadow: 0 0 10px #ffd700; animation: blink 1s infinite; }
+        
+        /* 🎮 인게임 UI */
         #ui-layer { position: absolute; top: 20px; left: 20px; width: calc(100% - 40px); pointer-events: none; z-index: 10; display: none; }
         .top-ui-row { display: flex; justify-content: space-between; align-items: flex-start; }
-        #scoreDisplay { font-size: 24px; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        #scoreDisplay { font-size: 20px; font-weight: 900; color: #fff; }
+        #stageDisplay { font-size: 26px; font-weight: 900; color: #ffd700; text-shadow: 0 0 15px #ffd700; margin-bottom: 5px;}
         #healthDisplay { font-size: 20px; color: #ff0055; margin-top: 5px; }
         #ammoDisplay { font-size: 20px; color: #fff; font-weight: bold; margin-top: 5px; }
         
-        /* 경험치 바 */
         .exp-container { width: 40%; max-width: 400px; height: 15px; background: #222; border: 2px solid #444; border-radius: 10px; overflow: hidden; margin: 0 auto; position: relative; }
-        .exp-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #00f3ff, #00ff88); transition: width 0.3s; }
-        .exp-text { position: absolute; top: 0; left: 0; width: 100%; text-align: center; font-size: 10px; color: #fff; line-height: 15px; font-weight: bold; text-shadow: 0 0 2px #000; }
-        #levelDisplay { text-align: center; color: #00f3ff; font-weight: 900; font-size: 1.2rem; margin-bottom: 5px; text-shadow: 0 0 10px #00f3ff; }
+        .exp-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #00f3ff, #00ff88); transition: 0.3s; }
+        .exp-text { position: absolute; top: 0; left: 0; width: 100%; text-align: center; font-size: 10px; color: #fff; line-height: 15px; font-weight: bold; }
+        #levelDisplay { text-align: center; color: #00f3ff; font-weight: 900; font-size: 1.2rem; margin-bottom: 5px; }
 
-        #notificationUI { position: absolute; top: 30%; left: 50%; transform: translateX(-50%); color: #ffd700; font-size: 1.5rem; font-weight: 900; text-shadow: 0 0 15px #ffd700; opacity: 0; transition: opacity 0.3s; z-index: 50; }
-        #bossWarning { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); font-size: 3.5rem; font-weight: 900; color: #ff0055; text-shadow: 0 0 20px #ff0055, 0 0 40px #ff0055; display: none; z-index: 20; animation: blink 0.5s infinite; }
+        #notificationUI { position: absolute; top: 30%; left: 50%; transform: translateX(-50%); color: #ffd700; font-size: 1.5rem; font-weight: 900; opacity: 0; transition: 0.3s; z-index: 50; }
+        #bossWarning { position: absolute; top: 30%; left: 50%; transform: translateX(-50%); font-size: 4rem; font-weight: 900; color: #ff0055; text-shadow: 0 0 30px #ff0055; display: none; z-index: 20; animation: blink 0.5s infinite; text-align: center; }
 
-        /* 모바일 조이스틱 */
+        /* 조이스틱 & 결과창 */
         .joystick-zone { position: absolute; bottom: 40px; width: 130px; height: 130px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; z-index: 15; display: none; }
         #joystick-left { left: 40px; } #joystick-right { right: 40px; }
         .joystick-knob { position: absolute; top: 50%; left: 50%; width: 50px; height: 50px; background: rgba(255,255,255,0.5); border-radius: 50%; transform: translate(-50%, -50%); }
-        #mobileReloadBtn { position: absolute; bottom: 180px; right: 65px; background: rgba(255,255,255,0.1); border: 2px solid #fff; color: #fff; width: 70px; height: 70px; border-radius: 50%; font-size: 1rem; font-weight: bold; display: none; z-index: 15; text-align: center; line-height: 70px; }
         
-        /* 업그레이드 & 게임오버 모달 */
         .modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 30; }
-        .modal-content { background: #050505; padding: 40px; border-radius: 10px; border: 1px solid #fff; text-align: center; }
+        .modal-content { background: #050505; padding: 40px; border-radius: 10px; border: 1px solid #fff; text-align: center; min-width: 300px; }
         .modal h1 { color: #fff; font-family: 'Orbitron'; font-size: 2.5rem; margin-top: 0; }
-        .card-container { display: flex; gap: 20px; margin-top: 30px; justify-content: center; }
-        .upgrade-card { background: #111; border: 1px solid #fff; border-radius: 8px; padding: 20px; width: 180px; cursor: pointer; transition: 0.3s; }
-        .upgrade-card:hover { transform: translateY(-10px); background: #fff; color: #000; }
-        .card-title { font-size: 20px; font-weight: bold; margin-bottom: 10px; }
-        .card-desc { font-size: 14px; color: #aaa; }
+        
+        .stat-box { background: #111; padding: 15px; border-radius: 5px; margin: 10px 0; border: 1px solid #333; text-align: left; font-size: 1.1rem; line-height: 1.8; color: #ddd; }
+        .stat-highlight { color: #00ff88; font-weight: bold; }
 
         canvas { display: block; }
-        @media (min-width: 800px) { .joystick-zone, #mobileReloadBtn { display: none !important; } }
+        @media (min-width: 800px) { .joystick-zone { display: none !important; } }
     </style>
 </head>
 <body>
 
     <audio id="bgm" src="bgm.mp3" loop></audio>
 
+    <!-- 시네마틱 인트로 -->
     <div id="studioIntro"><div class="logo-text"><span class="t-white">THR</span><span class="t-e">E</span><span class="t-3">3</span><span class="t-white">RIC</span></div></div>
 
+    <!-- 메인 화면 -->
     <div id="introScreen" style="display: none;">
         <div class="intro-title">트릭이 키우기</div>
         <div class="diamond-display">💎 <span id="mainDiaCount">0</span></div>
-        <div class="menu-btns">
-            <button class="btn-enter" onclick="triggerWarp()">START</button>
-            <button class="btn-shop" onclick="openShop()">STORE</button>
+        <div class="menu-grid">
+            <button class="btn-menu btn-shop" onclick="openModal('shopModal'); renderShop();">STORE</button>
+            <button class="btn-menu btn-hangar" onclick="openModal('hangarModal'); renderHangar();">HANGAR</button>
+            <button class="btn-menu btn-pass" onclick="openModal('passModal'); renderPass();">SEASON PASS</button>
+            <button class="btn-menu btn-start" onclick="triggerWarp()">START WARP</button>
+        </div>
+        <div style="color:#aaa; font-size:0.8rem; margin-top:30px;">자발적 후원: 9003259257108 새마을 금고</div>
+    </div>
+
+    <!-- 🛒 상점 -->
+    <div id="shopModal" class="full-modal">
+        <div class="full-container">
+            <div class="modal-header"><h2 style="color:#ffd700;">BLACK MARKET</h2><div class="close-btn" onclick="closeModal('shopModal')">X</div></div>
+            <div style="margin-bottom: 20px; font-weight: bold; color: #00f3ff;">보유 다이아: 💎 <span class="syncDia">0</span></div>
+            <div style="color:#fff; margin-bottom:10px;">🛡️ 스킨 (Skins)</div>
+            <div class="items-grid" id="shopSkins"></div>
+            <div style="color:#fff; margin-bottom:10px;">🔫 무기 (Weapons)</div>
+            <div class="items-grid" id="shopWeapons"></div>
         </div>
     </div>
 
-    <div id="shopModal">
-        <div class="shop-container">
-            <div class="shop-header">
-                <h2>BLACK MARKET</h2>
-                <div style="color: #00f3ff; font-weight: bold;">💎 <span id="shopDiaCount">0</span></div>
-                <div class="close-shop" onclick="closeShop()">X</div>
-            </div>
-            
-            <div class="shop-section">
-                <h3>무기 (Weapons)</h3>
-                <div class="items-grid" id="weaponList"></div>
-            </div>
+    <!-- 🛠️ 격납고 -->
+    <div id="hangarModal" class="full-modal">
+        <div class="full-container">
+            <div class="modal-header"><h2 style="color:#00f3ff;">HANGAR (격납고)</h2><div class="close-btn" onclick="closeModal('hangarModal')">X</div></div>
+            <div style="margin-bottom: 15px; color:#aaa;">보유한 스킨과 무기를 장착하고 스펙을 비교하세요.</div>
+            <div style="color:#fff; margin-bottom:10px;">🛡️ 내 스킨</div>
+            <div class="items-grid" id="hangarSkins"></div>
+            <div style="color:#fff; margin-bottom:10px;">🔫 내 무기</div>
+            <div class="items-grid" id="hangarWeapons"></div>
+        </div>
+    </div>
 
-            <div class="shop-section">
-                <h3>스킨 (Skins)</h3>
-                <div class="items-grid" id="skinList"></div>
-            </div>
-
-            <div class="gacha-box">
-                <div class="gacha-desc">트릭이의 계좌로 자발적 후원을 해주세요 (9003259257108 새마을 금고)<br>후원 시 확률적으로 대량의 다이아를 얻습니다!</div>
-                <button class="btn-gacha" onclick="playGacha()">후원금 보내기 (뽑기)</button>
+    <!-- 🎟️ 시즌 패스 -->
+    <div id="passModal" class="full-modal">
+        <div class="full-container" style="max-width: 600px;">
+            <div class="modal-header"><h2 style="color:#ff0055;">SEASON PASS</h2><div class="close-btn" onclick="closeModal('passModal')">X</div></div>
+            <p style="color:#aaa;">게임을 플레이하며 누적 킬 수를 채우고 보상을 받으세요!</p>
+            <div class="pass-track">
+                <div style="display:flex; justify-content:space-between; color:#fff; margin-bottom:5px;">
+                    <span>시즌 누적 킬 (EXP)</span><span id="passKillsText">0 / 1000</span>
+                </div>
+                <div class="pass-progress"><div class="pass-fill" id="passFill"></div></div>
+                <div id="passTiers"></div>
             </div>
         </div>
     </div>
 
+    <!-- 🎮 게임 UI -->
     <div id="ui-layer">
         <div id="levelDisplay">LEVEL 1</div>
-        <div class="exp-container">
-            <div class="exp-fill" id="expFill"></div>
-            <div class="exp-text" id="expText">0 / 10</div>
-        </div>
+        <div class="exp-container"><div class="exp-fill" id="expFill"></div><div class="exp-text" id="expText">0 / 10</div></div>
         <div class="top-ui-row">
             <div>
+                <div id="stageDisplay">STAGE 1</div>
                 <div id="scoreDisplay">처치: 0</div>
                 <div id="healthDisplay">HP: ❤️❤️❤️</div>
             </div>
@@ -187,139 +163,161 @@
     </div>
     
     <div id="notificationUI"></div>
-    <div id="bossWarning">⚠️ 보스몹 등장 ⚠️</div>
+    <div id="bossWarning">⚠️ STAGE BOSS ⚠️<br><span style="font-size:1.5rem; color:#fff;">강력한 적 접근 중!</span></div>
 
     <div id="joystick-left" class="joystick-zone"><div id="knob-left" class="joystick-knob"></div></div>
     <div id="joystick-right" class="joystick-zone"><div id="knob-right" class="joystick-knob"></div></div>
-    <div id="mobileReloadBtn" onclick="reload()">RELOAD</div>
 
+    <!-- 게임 모달 -->
     <div id="upgradeModal" class="modal">
         <div class="modal-content">
-            <h1>LEVEL UP</h1>
-            <p style="color: #aaa;">능력을 하나 선택하세요.</p>
-            <div class="card-container" id="cardContainer"></div>
+            <h1>LEVEL UP</h1><p style="color: #aaa;">능력을 하나 선택하세요.</p>
+            <div class="card-container" id="cardContainer" style="display:flex; gap:15px; justify-content:center;"></div>
         </div>
     </div>
 
     <div id="gameOverModal" class="modal">
         <div class="modal-content" style="border-color: #ff0055;">
-            <h1 style="color: #ff0055; text-shadow: 0 0 20px #ff0055;">GAME OVER</h1>
-            <p id="finalScore" style="font-size: 24px; color: #fff;">최종 처치 수: 0</p>
-            <p id="earnedDia" style="font-size: 18px; color: #00f3ff;">획득 다이아: 0</p>
-            <button class="btn-enter" onclick="location.reload()" style="margin-top:20px;">메인으로</button>
+            <h1 style="color: #ff0055; text-shadow: 0 0 20px #ff0055;">MISSION FAILED</h1>
+            <div class="stat-box">
+                ⏱️ 생존 시간: <span class="stat-highlight" id="statTime">0분 0초</span><br>
+                🚩 도달 스테이지: <span class="stat-highlight" id="statStage">1</span><br>
+                💀 처치한 적: <span class="stat-highlight" id="statKills">0</span><br>
+                💎 획득 다이아: <span class="stat-highlight" id="statDia">+0</span>
+            </div>
+            <button class="btn-menu btn-start" onclick="respawnToMain()" style="width:100%;">메인으로 귀환</button>
         </div>
     </div>
 
     <canvas id="gameCanvas"></canvas>
 
     <script>
-        // --- 데이터 관리 (로컬 스토리지) ---
+        // --- 데이터베이스 & 세이브 ---
+        const DB = {
+            weapons: {
+                'blaster': { name: '블래스터', desc: '기본 총기', stat: 'Dmg 0.5 | Ammo 30 | 단발', price: 0 },
+                'dual_pistols': { name: '트윈 팽', desc: '두 발의 총알을 동시 발사', stat: 'Dmg 0.4x2 | Ammo 40', price: 150 },
+                'laser': { name: '광자 레이저', desc: '적을 관통하는 빔', stat: 'Dmg 0.6 | Ammo 20 | 관통', price: 200 },
+                'shotgun': { name: '산탄총', desc: '5발의 총알을 넓게 흩뿌림', stat: 'Dmg 0.3x5 | Ammo 12 | 근접강력', price: 300 },
+                'sniper': { name: '레일건', desc: '매우 빠르고 강력한 한 방', stat: 'Dmg 4.0 | Ammo 5 | 연사느림', price: 400 },
+                'sword': { name: '에너지 소드', desc: '전방 광역 베기 (탄창무한)', stat: 'Dmg 3.0 | Ammo ∞ | 근접전용', price: 500 }
+            },
+            skins: {
+                'default': { name: '훈련용 기체', desc: '표준형 우주선', stat: 'HP 3', price: 0 },
+                'vip': { name: '골드 이지스', desc: '강화된 장갑재', stat: 'HP 5', price: 250 },
+                'shield': { name: '가디언 쉴드', desc: '스테이지마다 보호막 재생', stat: 'HP 3 + 쉴드 1', price: 400 },
+                'ghost': { name: '팬텀 스텔스', desc: '경량화된 스텔스 기체', stat: 'HP 3 | Speed +2', price: 300 },
+                'neon_rider': { name: '네온 라이더 (Pass)', desc: '시즌 패스 한정 보상', stat: 'HP 4 | Speed +1', price: 99999 } // 상점 불가
+            },
+            passTiers: [
+                { req: 100, reward: { type: 'dia', val: 100, name: '100 다이아' } },
+                { req: 300, reward: { type: 'dia', val: 200, name: '200 다이아' } },
+                { req: 600, reward: { type: 'dia', val: 300, name: '300 다이아' } },
+                { req: 1000, reward: { type: 'skin', val: 'neon_rider', name: '네온 라이더 스킨' } }
+            ]
+        };
+
         let userData = {
             diamonds: parseInt(localStorage.getItem('diamonds') || '0'),
+            totalKills: parseInt(localStorage.getItem('totalKills') || '0'),
             skins: JSON.parse(localStorage.getItem('skins') || '["default"]'),
             weapons: JSON.parse(localStorage.getItem('weapons') || '["blaster"]'),
             equipSkin: localStorage.getItem('equipSkin') || 'default',
-            equipWeapon: localStorage.getItem('equipWeapon') || 'blaster'
+            equipWeapon: localStorage.getItem('equipWeapon') || 'blaster',
+            passClaimed: JSON.parse(localStorage.getItem('passClaimed') || '[]')
         };
 
         function saveData() {
             localStorage.setItem('diamonds', userData.diamonds);
+            localStorage.setItem('totalKills', userData.totalKills);
             localStorage.setItem('skins', JSON.stringify(userData.skins));
             localStorage.setItem('weapons', JSON.stringify(userData.weapons));
             localStorage.setItem('equipSkin', userData.equipSkin);
             localStorage.setItem('equipWeapon', userData.equipWeapon);
+            localStorage.setItem('passClaimed', JSON.stringify(userData.passClaimed));
             document.getElementById('mainDiaCount').innerText = userData.diamonds;
-            document.getElementById('shopDiaCount').innerText = userData.diamonds;
+            document.querySelectorAll('.syncDia').forEach(el => el.innerText = userData.diamonds);
         }
 
-        // --- 상점 아이템 DB ---
-        const shopDB = {
-            weapons: [
-                { id: 'blaster', name: '기본 블래스터', desc: '평범한 총알', price: 0 },
-                { id: 'laser', name: '광자 레이저', desc: '빠르고 관통하는 파란 광선', price: 150 },
-                { id: 'sword', name: '에너지 소드', desc: '근접 범위 광역 베기 (탄창 없음)', price: 300 }
-            ],
-            skins: [
-                { id: 'default', name: '기본 기체', desc: '기본 체력(3)', price: 0 },
-                { id: 'vip', name: 'VIP 골드 기체', desc: '기본 체력 +2 증가', price: 200 }
-            ]
-        };
+        // --- UI 모달 관리 ---
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        function openShop() { document.getElementById('shopModal').style.display = 'flex'; renderShop(); }
-        function closeShop() { document.getElementById('shopModal').style.display = 'none'; }
-        
+        // 상점 (미보유 항목 구매)
         function renderShop() {
-            const wList = document.getElementById('weaponList'); wList.innerHTML = '';
-            const sList = document.getElementById('skinList'); sList.innerHTML = '';
+            const wList = document.getElementById('shopWeapons'); wList.innerHTML = '';
+            const sList = document.getElementById('shopSkins'); sList.innerHTML = '';
             
-            shopDB.weapons.forEach(item => {
-                const isOwned = userData.weapons.includes(item.id);
-                const isEq = userData.equipWeapon === item.id;
-                wList.innerHTML += `
-                    <div class="shop-item">
-                        <div><div class="item-name">${item.name}</div><div class="item-desc">${item.desc}</div></div>
-                        <div>
-                            ${!isOwned ? `<div class="item-price">💎 ${item.price}</div>` : ''}
-                            <button class="btn-buy ${isEq?'equipped':''}" onclick="buyOrEquip('weapon', '${item.id}', ${item.price})">
-                                ${isEq ? '장착중' : (isOwned ? '장착하기' : '구매')}
-                            </button>
-                        </div>
-                    </div>`;
+            Object.keys(DB.weapons).forEach(id => {
+                if(userData.weapons.includes(id)) return; // 보유 시 상점에서 숨김
+                const item = DB.weapons[id];
+                wList.innerHTML += `<div class="item-card"><div><div class="item-name">${item.name}</div><div class="item-desc">${item.desc}</div><div class="item-stat">${item.stat}</div></div><button class="btn-action" onclick="buyItem('weapon', '${id}', ${item.price})">💎 ${item.price} 구매</button></div>`;
             });
-            shopDB.skins.forEach(item => {
-                const isOwned = userData.skins.includes(item.id);
-                const isEq = userData.equipSkin === item.id;
-                sList.innerHTML += `
-                    <div class="shop-item">
-                        <div><div class="item-name">${item.name}</div><div class="item-desc">${item.desc}</div></div>
-                        <div>
-                            ${!isOwned ? `<div class="item-price">💎 ${item.price}</div>` : ''}
-                            <button class="btn-buy ${isEq?'equipped':''}" onclick="buyOrEquip('skin', '${item.id}', ${item.price})">
-                                ${isEq ? '장착중' : (isOwned ? '장착하기' : '구매')}
-                            </button>
-                        </div>
-                    </div>`;
+            Object.keys(DB.skins).forEach(id => {
+                if(userData.skins.includes(id) || id === 'neon_rider') return;
+                const item = DB.skins[id];
+                sList.innerHTML += `<div class="item-card"><div><div class="item-name">${item.name}</div><div class="item-desc">${item.desc}</div><div class="item-stat">${item.stat}</div></div><button class="btn-action" onclick="buyItem('skin', '${id}', ${item.price})">💎 ${item.price} 구매</button></div>`;
             });
         }
-
-        function buyOrEquip(type, id, price) {
-            const ownedList = type === 'weapon' ? userData.weapons : userData.skins;
-            if (ownedList.includes(id)) {
-                if(type === 'weapon') userData.equipWeapon = id; else userData.equipSkin = id;
-            } else {
-                if (userData.diamonds >= price) {
-                    userData.diamonds -= price; ownedList.push(id);
-                    if(type === 'weapon') userData.equipWeapon = id; else userData.equipSkin = id;
-                } else { alert("다이아가 부족합니다!"); return; }
-            }
-            saveData(); renderShop();
+        function buyItem(type, id, price) {
+            if(userData.diamonds >= price) {
+                userData.diamonds -= price;
+                if(type==='weapon') userData.weapons.push(id); else userData.skins.push(id);
+                saveData(); renderShop(); alert("구매 완료! HANGAR에서 장착하세요.");
+            } else alert("다이아가 부족합니다!");
         }
 
-        function playGacha() {
-            const btn = document.querySelector('.btn-gacha'); btn.disabled = true; btn.innerText = "확인 중...";
-            setTimeout(() => {
-                const isJackpot = Math.random() < 0.05;
-                const reward = isJackpot ? Math.floor(Math.random() * 300) + 200 : Math.floor(Math.random() * 40) + 10;
-                userData.diamonds += reward; saveData();
-                alert(isJackpot ? `🎉 잭팟!! 후원 감사 이벤트로 💎${reward} 당첨!` : `후원 감사합니다! 소정의 상품 💎${reward} 지급!`);
-                btn.disabled = false; btn.innerText = "후원금 보내기 (뽑기)";
-            }, 1000);
+        // 격납고 (보유 항목 장착)
+        function renderHangar() {
+            const wList = document.getElementById('hangarWeapons'); wList.innerHTML = '';
+            const sList = document.getElementById('hangarSkins'); sList.innerHTML = '';
+            
+            userData.weapons.forEach(id => {
+                const item = DB.weapons[id]; const isEq = userData.equipWeapon === id;
+                wList.innerHTML += `<div class="item-card"><div><div class="item-name">${item.name}</div><div class="item-stat">${item.stat}</div></div><button class="btn-action ${isEq?'equipped':''}" onclick="equipItem('weapon', '${id}')">${isEq?'장착됨':'장착하기'}</button></div>`;
+            });
+            userData.skins.forEach(id => {
+                const item = DB.skins[id]; const isEq = userData.equipSkin === id;
+                sList.innerHTML += `<div class="item-card"><div><div class="item-name">${item.name}</div><div class="item-stat">${item.stat}</div></div><button class="btn-action ${isEq?'equipped':''}" onclick="equipItem('skin', '${id}')">${isEq?'장착됨':'장착하기'}</button></div>`;
+            });
+        }
+        function equipItem(type, id) {
+            if(type==='weapon') userData.equipWeapon = id; else userData.equipSkin = id;
+            saveData(); renderHangar();
         }
 
-        // --- 오디오 & 기본 세팅 ---
+        // 시즌 패스
+        function renderPass() {
+            document.getElementById('passKillsText').innerText = `${userData.totalKills} / 1000`;
+            document.getElementById('passFill').style.width = `${Math.min(100, (userData.totalKills/1000)*100)}%`;
+            const tList = document.getElementById('passTiers'); tList.innerHTML = '';
+            
+            DB.passTiers.forEach((tier, index) => {
+                const isClaimed = userData.passClaimed.includes(index);
+                const isReady = !isClaimed && userData.totalKills >= tier.req;
+                tList.innerHTML += `
+                    <div class="pass-tier ${isClaimed?'unlocked':''}">
+                        <div><strong style="color:#00f3ff;">[${tier.req} Kills]</strong> ${tier.reward.name}</div>
+                        <button class="btn-claim ${isReady?'ready':''}" ${isReady?`onclick="claimPass(${index})"`:'disabled'}>${isClaimed?'수령완료':'받기'}</button>
+                    </div>`;
+            });
+        }
+        function claimPass(idx) {
+            const tier = DB.passTiers[idx];
+            if(tier.reward.type === 'dia') userData.diamonds += tier.reward.val;
+            else if(tier.reward.type === 'skin') userData.skins.push(tier.reward.val);
+            userData.passClaimed.push(idx);
+            saveData(); renderPass(); alert(`${tier.reward.name} 획득!`);
+        }
+
+        // --- 오디오 세팅 ---
         const AudioContext = window.AudioContext || window.webkitAudioContext; let audioCtx;
-        function initAudio() {
-            if(!audioCtx) audioCtx = new AudioContext(); if(audioCtx.state === 'suspended') audioCtx.resume();
-            const bgm = document.getElementById('bgm'); bgm.volume = 0.3; bgm.play().catch(()=>{});
-        }
+        function initAudio() { if(!audioCtx) audioCtx = new AudioContext(); if(audioCtx.state === 'suspended') audioCtx.resume(); document.getElementById('bgm').volume = 0.3; document.getElementById('bgm').play().catch(()=>{}); }
         function playSfx(type) {
-            if(!audioCtx) return;
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            if(type==='shoot') { osc.type = 'square'; osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime+0.1); gain.gain.setValueAtTime(0.02, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.1); osc.start(); osc.stop(audioCtx.currentTime+0.1); }
-            if(type==='laser') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(1500, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(500, audioCtx.currentTime+0.2); gain.gain.setValueAtTime(0.02, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.2); osc.start(); osc.stop(audioCtx.currentTime+0.2); }
-            if(type==='sword') { osc.type = 'sine'; osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime+0.15); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime+0.15); osc.start(); osc.stop(audioCtx.currentTime+0.15); }
-            if(type==='hit') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime+0.1); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.1); osc.start(); osc.stop(audioCtx.currentTime+0.1); }
+            if(!audioCtx) return; const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination);
+            if(type==='shoot') { osc.type='square'; osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime+0.1); gain.gain.setValueAtTime(0.01, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.1); osc.start(); osc.stop(audioCtx.currentTime+0.1); }
+            if(type==='laser' || type==='sword') { osc.type='sawtooth'; osc.frequency.setValueAtTime(1200, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime+0.15); gain.gain.setValueAtTime(0.02, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.15); osc.start(); osc.stop(audioCtx.currentTime+0.15); }
+            if(type==='hit') { osc.type='sawtooth'; osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime+0.1); gain.gain.setValueAtTime(0.03, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.1); osc.start(); osc.stop(audioCtx.currentTime+0.1); }
         }
 
         const canvas = document.getElementById('gameCanvas'); const ctx = canvas.getContext('2d');
@@ -328,93 +326,92 @@
         let notiTimer; function showNotification(msg) { const noti = document.getElementById('notificationUI'); noti.innerText = msg; noti.style.opacity = 1; clearTimeout(notiTimer); notiTimer = setTimeout(() => { noti.style.opacity = 0; }, 2500); }
 
         window.onload = () => {
-            saveData(); // 로드 시 UI 반영
-            setTimeout(() => {
-                const studio = document.getElementById('studioIntro'); studio.style.opacity = '0';
-                setTimeout(() => { studio.style.display = 'none'; document.getElementById('introScreen').style.display = 'flex'; }, 1500);
-            }, 3000); 
+            saveData(); setTimeout(() => { const studio = document.getElementById('studioIntro'); studio.style.opacity = '0'; setTimeout(() => { studio.style.display = 'none'; document.getElementById('introScreen').style.display = 'flex'; }, 1000); }, 3000); 
         };
 
         function triggerWarp() {
             initAudio(); const intro = document.getElementById('introScreen'); intro.classList.add('warp-active');
-            setTimeout(() => {
-                intro.style.display = 'none'; document.getElementById('ui-layer').style.display = 'block';
-                if(window.innerWidth < 800) { document.getElementById('joystick-left').style.display = 'block'; document.getElementById('joystick-right').style.display = 'block'; if(userData.equipWeapon !== 'sword') document.getElementById('mobileReloadBtn').style.display = 'block'; }
-                startGame();
-            }, 1000); 
+            setTimeout(() => { intro.style.display = 'none'; intro.classList.remove('warp-active'); document.getElementById('ui-layer').style.display = 'block'; startGame(); }, 1000); 
         }
-
-        // --- 전역 변수 (EXP 시스템 포함) ---
-        let score = 0, earnedDiamonds = 0;
-        let difficultyMultiplier = 1.0;
-        let gameActive = false, isPaused = false;
         
-        let playerLevel = 1;
-        let currentExp = 0;
-        let expToNext = 10; // 초기 요구 경험치
-
-        const stars = [];
-        for(let i=0; i<150; i++) stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*1.5, alpha: Math.random(), fade: (Math.random()*0.02)+0.005 });
-        function drawStars() {
-            stars.forEach(s => { s.alpha += s.fade; if(s.alpha >= 1 || s.alpha <= 0.1) s.fade *= -1; ctx.fillStyle = `rgba(255, 255, 255, ${s.alpha})`; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill(); });
+        function respawnToMain() {
+            closeModal('gameOverModal'); document.getElementById('ui-layer').style.display = 'none';
+            document.getElementById('introScreen').style.display = 'flex'; // 메인 메뉴로 소프트 리셋
         }
 
-        function drawPolygon(ctx, x, y, radius, sides, color, rotation) {
-            ctx.save(); ctx.translate(x, y); ctx.rotate(rotation); ctx.beginPath();
-            for (let i = 0; i < sides; i++) { const angle = (i * 2 * Math.PI) / sides; ctx.lineTo(radius * Math.cos(angle), radius * Math.sin(angle)); }
-            ctx.closePath(); ctx.fillStyle = color; ctx.shadowBlur = 10; ctx.shadowColor = color; ctx.fill();
-            ctx.lineWidth = 1; ctx.strokeStyle = '#fff'; ctx.stroke(); ctx.restore();
-        }
+        // --- 인게임 핵심 변수 ---
+        let score = 0, earnedDiamonds = 0, gameActive = false, isPaused = false, startTime = 0;
+        let playerLevel = 1, currentExp = 0, expToNext = 10;
+        let stage = 1, killsInStage = 0, bossActive = false;
+        
+        const stars = []; for(let i=0; i<150; i++) stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*1.5, alpha: Math.random(), fade: (Math.random()*0.02)+0.005 });
+        function drawStars() { stars.forEach(s => { s.alpha += s.fade; if(s.alpha >= 1 || s.alpha <= 0.1) s.fade *= -1; ctx.fillStyle = `rgba(255, 255, 255, ${s.alpha})`; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill(); }); }
 
-        // --- 플레이어 기체 ---
+        function drawPolygon(ctx, x, y, radius, sides, color, rotation) { ctx.save(); ctx.translate(x, y); ctx.rotate(rotation); ctx.beginPath(); for (let i = 0; i < sides; i++) { const angle = (i * 2 * Math.PI) / sides; ctx.lineTo(radius * Math.cos(angle), radius * Math.sin(angle)); } ctx.closePath(); ctx.fillStyle = color; ctx.shadowBlur = 10; ctx.shadowColor = color; ctx.fill(); ctx.lineWidth = 1; ctx.strokeStyle = '#fff'; ctx.stroke(); ctx.restore(); }
+
+        // --- 엔티티 클래스 ---
         class Player {
-            constructor(x, y) {
-                this.x = x; this.y = y; this.radius = 20; this.speed = 6;
-                this.maxHealth = userData.equipSkin === 'vip' ? 5 : 3;
+            constructor() {
+                this.x = canvas.width/2; this.y = canvas.height/2; this.radius = 20; this.angle = 0;
+                
+                // 스킨 스펙 적용
+                const s = userData.equipSkin;
+                this.maxHealth = (s==='vip') ? 5 : ((s==='neon_rider') ? 4 : 3);
                 this.health = this.maxHealth;
-                this.damage = userData.equipWeapon === 'sword' ? 3 : (userData.equipWeapon === 'laser' ? 0.6 : 0.8);
-                this.maxAmmo = userData.equipWeapon === 'sword' ? 1 : 30;
+                this.speed = (s==='ghost') ? 8 : ((s==='neon_rider') ? 7 : 6);
+                this.shield = (s==='shield') ? 1 : 0; // 보호막 스킨
+                this.color = (s==='vip') ? '#ffd700' : ((s==='ghost') ? '#555' : ((s==='neon_rider') ? '#ff0055' : '#fff'));
+                
+                // 무기 스펙 적용
+                const w = userData.equipWeapon;
+                this.wType = w; this.isReloading = false; this.lastShotTime = 0; this.emptyTime = 0;
+                if(w==='blaster') { this.damage = 0.5; this.maxAmmo = 30; this.fireDelay = 150; }
+                else if(w==='dual_pistols') { this.damage = 0.4; this.maxAmmo = 40; this.fireDelay = 120; }
+                else if(w==='laser') { this.damage = 0.6; this.maxAmmo = 20; this.fireDelay = 100; }
+                else if(w==='shotgun') { this.damage = 0.3; this.maxAmmo = 12; this.fireDelay = 500; }
+                else if(w==='sniper') { this.damage = 4.0; this.maxAmmo = 5; this.fireDelay = 1000; }
+                else if(w==='sword') { this.damage = 3.0; this.maxAmmo = 1; this.fireDelay = 400; }
                 this.currentAmmo = this.maxAmmo;
-                this.fireDelay = userData.equipWeapon === 'sword' ? 400 : (userData.equipWeapon === 'laser' ? 100 : 150);
-                this.lastShotTime = 0; this.isReloading = false; this.angle = 0; this.emptyTime = 0; 
-                this.color = userData.equipSkin === 'vip' ? '#ffd700' : '#fff';
             }
             draw() {
                 ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
-                ctx.beginPath(); ctx.moveTo(this.radius * 1.2, 0); ctx.lineTo(-this.radius * 0.8, this.radius * 0.8); ctx.lineTo(-this.radius * 0.3, 0); ctx.lineTo(-this.radius * 0.8, -this.radius * 0.8); ctx.closePath();
+                // 전투기 기체
+                ctx.beginPath(); ctx.moveTo(this.radius*1.2, 0); ctx.lineTo(-this.radius*0.8, this.radius*0.8); ctx.lineTo(-this.radius*0.3, 0); ctx.lineTo(-this.radius*0.8, -this.radius*0.8); ctx.closePath();
                 ctx.fillStyle = '#111'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = this.color; ctx.shadowBlur = 10; ctx.shadowColor = this.color; ctx.stroke();
-                ctx.beginPath(); ctx.arc(-this.radius * 0.1, 0, this.radius * 0.25, 0, Math.PI * 2); ctx.fillStyle = '#00f3ff'; ctx.shadowBlur = 15; ctx.shadowColor = '#00f3ff'; ctx.fill();
+                // 쉴드 이펙트
+                if(this.shield > 0) { ctx.beginPath(); ctx.arc(0, 0, this.radius+10, 0, Math.PI*2); ctx.strokeStyle = '#00f3ff'; ctx.lineWidth = 2; ctx.stroke(); }
                 ctx.restore();
             }
         }
 
         class Projectile {
-            constructor(x, y, angle, type, damage) {
-                this.x = x; this.y = y; this.angle = angle; this.type = type; this.damage = damage;
-                this.hitSet = new Set(); // 레이저 중복타격 방지
+            constructor(x, y, angle, type, damage, offsetAngle = 0) {
+                this.x = x; this.y = y; this.angle = angle + offsetAngle; this.type = type; this.damage = damage; this.hitSet = new Set();
+                let speed = 20; this.radius = 4; this.life = 100;
+                if(type === 'laser') { speed = 30; this.radius = 2; this.life = 60; }
+                else if(type === 'sniper') { speed = 40; this.radius = 3; }
+                else if(type === 'shotgun') { speed = 15; }
+                else if(type === 'sword') { speed = 0; this.life = 10; this.radius = 45; }
                 
-                if(type === 'blaster') { this.velocity = {x: Math.cos(angle)*20, y: Math.sin(angle)*20}; this.radius = 4; this.life = 100; }
-                else if(type === 'laser') { this.velocity = {x: Math.cos(angle)*30, y: Math.sin(angle)*30}; this.radius = 2; this.life = 60; }
-                else if(type === 'sword') { this.velocity = {x:0, y:0}; this.life = 10; this.radius = 40; } // 수명 10프레임
+                this.velocity = { x: Math.cos(this.angle)*speed, y: Math.sin(this.angle)*speed };
+                
+                // 쌍권총: 발사 위치 양옆으로 벌림
+                if(type === 'dual_pistols' && offsetAngle !== 0) {
+                    const perp = angle + (Math.PI/2);
+                    this.x += Math.cos(perp) * offsetAngle; this.y += Math.sin(perp) * offsetAngle;
+                }
             }
             draw() {
                 if(this.type === 'sword') {
                     ctx.save(); ctx.translate(player.x, player.y); ctx.rotate(player.angle);
-                    ctx.beginPath(); ctx.arc(0, 0, this.radius+15, -Math.PI/2, Math.PI/2);
-                    ctx.strokeStyle = '#00ff88'; ctx.lineWidth = 15; ctx.shadowBlur = 20; ctx.shadowColor = '#00ff88'; ctx.stroke(); ctx.restore();
+                    ctx.beginPath(); ctx.arc(0, 0, this.radius+10, -Math.PI/2, Math.PI/2); ctx.strokeStyle = '#00ff88'; ctx.lineWidth = 15; ctx.shadowBlur = 20; ctx.shadowColor = '#00ff88'; ctx.stroke(); ctx.restore();
                 } else if(this.type === 'laser') {
-                    ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
-                    ctx.fillStyle = '#00f3ff'; ctx.shadowBlur = 15; ctx.shadowColor = '#00f3ff'; ctx.fillRect(0, -this.radius, 40, this.radius*2); ctx.restore();
+                    ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle); ctx.fillStyle = '#00f3ff'; ctx.shadowBlur = 15; ctx.shadowColor = '#00f3ff'; ctx.fillRect(0, -this.radius, 40, this.radius*2); ctx.restore();
                 } else {
                     ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.shadowBlur = 10; ctx.shadowColor = '#fff'; ctx.fill();
                 }
             }
-            update() { 
-                this.life--; 
-                if(this.type === 'sword') { this.x = player.x; this.y = player.y; } // 검은 플레이어 따라감
-                else { this.x += this.velocity.x; this.y += this.velocity.y; }
-                this.draw(); 
-            }
+            update() { this.life--; if(this.type === 'sword') { this.x = player.x; this.y = player.y; } else { this.x += this.velocity.x; this.y += this.velocity.y; } this.draw(); }
         }
 
         class EnemyProjectile {
@@ -426,9 +423,7 @@
         class Enemy {
             constructor(x, y, radius, color, velocity, health, type, isBoss = false) {
                 this.x = x; this.y = y; this.radius = radius; this.color = color; this.velocity = velocity; this.health = health; this.maxHealth = health;
-                this.type = type; this.isBoss = isBoss; this.rotation = 0;
-                this.lastShot = Date.now() + Math.random()*2000;
-                this.bossPhase = 0;
+                this.type = type; this.isBoss = isBoss; this.rotation = 0; this.lastShot = Date.now() + Math.random()*2000; this.bossPhase = 0;
             }
             draw() {
                 this.rotation += 0.02; 
@@ -437,108 +432,93 @@
                 else if(this.type === 'tank') drawPolygon(ctx, this.x, this.y, this.radius, 6, this.color, this.rotation); 
                 else drawPolygon(ctx, this.x, this.y, this.radius, 4, this.color, this.rotation); 
                 
-                const barW = this.radius * 2; const barH = this.isBoss ? 10 : 4;
-                const hpRatio = this.health / this.maxHealth;
+                const barW = this.radius * 2; const barH = this.isBoss ? 8 : 4;
                 ctx.fillStyle = '#333'; ctx.fillRect(this.x - this.radius, this.y - this.radius - 15, barW, barH);
-                ctx.fillStyle = hpRatio > 0.4 ? '#fff' : '#ff0055'; ctx.fillRect(this.x - this.radius, this.y - this.radius - 15, barW * hpRatio, barH);
+                ctx.fillStyle = (this.health/this.maxHealth) > 0.4 ? '#fff' : '#ff0055'; ctx.fillRect(this.x - this.radius, this.y - this.radius - 15, barW * (this.health/this.maxHealth), barH);
             }
             update() { 
                 if(this.isBoss) {
-                    // 보스는 화면 안으로 들어오면 못나감
                     this.x += this.velocity.x; this.y += this.velocity.y;
-                    if(this.x < this.radius) this.x = this.radius; if(this.x > canvas.width - this.radius) this.x = canvas.width - this.radius;
-                    if(this.y < this.radius) this.y = this.radius; if(this.y > canvas.height - this.radius) this.y = canvas.height - this.radius;
+                    if(this.x < this.radius) this.velocity.x *= -1; if(this.x > canvas.width - this.radius) this.velocity.x *= -1;
+                    if(this.y < this.radius) this.velocity.y *= -1; if(this.y > canvas.height - this.radius) this.velocity.y *= -1;
                     
-                    // 보스 패턴 공격
-                    if(Date.now() - this.lastShot > 1500) {
+                    if(Date.now() - this.lastShot > (stage%3===0 ? 800 : 1500)) { // 3스테이지 보스는 매우 빠름
                         this.lastShot = Date.now();
-                        if(this.bossPhase === 0) { // 원형 패턴
-                            for(let i=0; i<8; i++) {
-                                const ang = (Math.PI*2 / 8) * i;
-                                enemyProjectiles.push(new EnemyProjectile(this.x, this.y, {x: Math.cos(ang)*4, y: Math.sin(ang)*4}));
-                            }
+                        if(this.bossPhase === 0) {
+                            const ways = stage%3===0 ? 16 : 8; // 3스테이지: 16방향
+                            for(let i=0; i<ways; i++) enemyProjectiles.push(new EnemyProjectile(this.x, this.y, {x: Math.cos((Math.PI*2/ways)*i)*5, y: Math.sin((Math.PI*2/ways)*i)*5}));
                             this.bossPhase = 1;
-                        } else { // 플레이어 조준 3연발
+                        } else {
                             const ang = Math.atan2(player.y - this.y, player.x - this.x);
-                            for(let i=-1; i<=1; i++) {
-                                const spread = ang + (i*0.2);
-                                enemyProjectiles.push(new EnemyProjectile(this.x, this.y, {x: Math.cos(spread)*6, y: Math.sin(spread)*6}));
-                            }
+                            for(let i=-2; i<=2; i++) enemyProjectiles.push(new EnemyProjectile(this.x, this.y, {x: Math.cos(ang+i*0.15)*7, y: Math.sin(ang+i*0.15)*7}));
                             this.bossPhase = 0;
                         }
                     }
                 } else {
                     this.x += this.velocity.x; this.y += this.velocity.y; 
-                    // 일반몹도 후반엔 가끔 쏨
-                    if(score >= 30 && this.type !== 'fast' && Date.now() - this.lastShot > 3000) {
+                    if(stage >= 2 && this.type !== 'fast' && Date.now() - this.lastShot > 3000) {
                         this.lastShot = Date.now() + Math.random()*2000;
                         const ang = Math.atan2(player.y - this.y, player.x - this.x);
-                        enemyProjectiles.push(new EnemyProjectile(this.x, this.y, {x: Math.cos(ang)*5, y: Math.sin(ang)*5}));
+                        enemyProjectiles.push(new EnemyProjectile(this.x, this.y, {x: Math.cos(ang)*4, y: Math.sin(ang)*4}));
                     }
                 }
                 this.draw(); 
             }
         }
 
-        const player = new Player(canvas.width / 2, canvas.height / 2);
-        const projectiles = [];
-        const enemyProjectiles = [];
-        const enemies = [];
+        class Item {
+            constructor(x, y) { this.x = x; this.y = y; this.radius = 10; this.life = 600; } // 약 10초 유지
+            draw() { ctx.fillStyle = '#00ff88'; ctx.font = "20px Arial"; ctx.fillText("💊", this.x-10, this.y+10); }
+            update() { this.life--; this.draw(); }
+        }
 
-        // --- 경험치 시스템 ---
+        let player;
+        let projectiles = [];
+        let enemyProjectiles = [];
+        let enemies = [];
+        let items = [];
+
+        // --- 시스템 로직 ---
         function gainExp(amount) {
             currentExp += amount;
             while(currentExp >= expToNext) {
-                currentExp -= expToNext;
-                expToNext = Math.floor(expToNext * 1.5); // 다음 레벨 요구량 1.5배 상승
-                playerLevel++;
+                currentExp -= expToNext; expToNext = Math.floor(expToNext * 1.5); playerLevel++;
                 document.getElementById('levelDisplay').innerText = `LEVEL ${playerLevel}`;
                 setTimeout(triggerUpgrade, 100);
             }
-            // UI 업데이트
-            const fillPct = Math.min(100, (currentExp / expToNext) * 100);
-            document.getElementById('expFill').style.width = `${fillPct}%`;
+            document.getElementById('expFill').style.width = `${Math.min(100, (currentExp/expToNext)*100)}%`;
             document.getElementById('expText').innerText = `${currentExp} / ${expToNext}`;
         }
 
-        // --- 재장전 및 공격 ---
         function updateAmmoDisplay() {
-            if(userData.equipWeapon === 'sword') { document.getElementById('ammoDisplay').innerText = '근접 무기'; return; }
-            const display = document.getElementById('ammoDisplay');
-            if (player.isReloading) { display.innerText = `장전 중...`; display.style.color = "#ff8c00"; }
-            else { display.innerText = `탄창: ${player.currentAmmo} / ${player.maxAmmo}`; display.style.color = player.currentAmmo === 0 ? "#ff0055" : "#fff"; }
+            if(player.wType === 'sword') { document.getElementById('ammoDisplay').innerText = '근접 검'; return; }
+            const disp = document.getElementById('ammoDisplay');
+            if(player.isReloading) { disp.innerText = `장전 중...`; disp.style.color = "#ff8c00"; }
+            else { disp.innerText = `탄창: ${player.currentAmmo} / ${player.maxAmmo}`; disp.style.color = player.currentAmmo===0 ? "#ff0055" : "#fff"; }
         }
 
         function reload() {
-            if(userData.equipWeapon === 'sword') return;
-            if (player.isReloading || player.currentAmmo === player.maxAmmo) return;
+            if(player.wType === 'sword' || player.isReloading || player.currentAmmo === player.maxAmmo) return;
             player.isReloading = true; updateAmmoDisplay();
             setTimeout(() => { player.currentAmmo = player.maxAmmo; player.isReloading = false; updateAmmoDisplay(); }, 1200);
         }
 
         function shoot() {
             if (!gameActive || isPaused) return;
-
-            if (userData.equipWeapon !== 'sword' && player.currentAmmo <= 0) { 
-                if(!player.isReloading) showNotification(window.innerWidth < 800 ? "RELOAD 버튼을 누르세요!" : "R키로 장전하세요.");
-                return; 
-            }
-            const now = Date.now();
-            if (now - player.lastShotTime < player.fireDelay) return;
+            if (player.wType !== 'sword' && player.currentAmmo <= 0) { if(!player.isReloading) showNotification("탄창이 비었습니다!"); return; }
+            const now = Date.now(); if (now - player.lastShotTime < player.fireDelay) return;
             
-            projectiles.push(new Projectile(player.x, player.y, player.angle, userData.equipWeapon, player.damage));
-            playSfx(userData.equipWeapon);
+            if(player.wType === 'dual_pistols') { projectiles.push(new Projectile(player.x, player.y, player.angle, player.wType, player.damage, -10)); projectiles.push(new Projectile(player.x, player.y, player.angle, player.wType, player.damage, 10)); }
+            else if(player.wType === 'shotgun') { for(let i=-2; i<=2; i++) projectiles.push(new Projectile(player.x, player.y, player.angle + i*0.15, player.wType, player.damage)); }
+            else { projectiles.push(new Projectile(player.x, player.y, player.angle, player.wType, player.damage)); }
             
-            if(userData.equipWeapon !== 'sword') {
-                player.currentAmmo--; updateAmmoDisplay();
-                if(player.currentAmmo === 0) player.emptyTime = Date.now(); 
-            }
+            playSfx('shoot');
+            if(player.wType !== 'sword') { player.currentAmmo--; updateAmmoDisplay(); if(player.currentAmmo === 0) player.emptyTime = Date.now(); }
             player.lastShotTime = now; 
         }
 
-        // --- 업그레이드 ---
         const upgrades = [
-            { name: '🔥 출력 강화', desc: '데미지 0.5 상승', apply: () => player.damage += 0.5 },
+            { name: '🔥 블래스터 강화', desc: '데미지 0.5 상승', apply: () => player.damage += 0.5 },
             { name: '⚡ 연사 엔진', desc: '발사 딜레이 감소', apply: () => player.fireDelay = Math.max(50, player.fireDelay - 30) },
             { name: '👟 추진기', desc: '이동 속도 증가', apply: () => player.speed += 1.5 },
             { name: '💖 나노 수리', desc: '체력을 전부 회복합니다', apply: () => { player.health = player.maxHealth; updateHealth(); } }
@@ -547,40 +527,38 @@
         function triggerUpgrade() {
             isPaused = true; document.getElementById('upgradeModal').style.display = 'flex';
             const container = document.getElementById('cardContainer'); container.innerHTML = '';
-            
-            // 검 착용자는 탄창 업글 제외
             let pool = upgrades;
-            if(userData.equipWeapon !== 'sword') {
-                pool = [...upgrades, { name: '📦 탄창 모듈', desc: '최대 탄창 +10', apply: () => { player.maxAmmo += 10; player.currentAmmo = player.maxAmmo; } }];
-            }
-
-            const shuffled = pool.sort(() => 0.5 - Math.random()).slice(0, 2);
-            shuffled.forEach(card => {
+            if(player.wType !== 'sword') pool = [...upgrades, { name: '📦 탄창 모듈', desc: '최대 탄창 +10', apply: () => { player.maxAmmo += 10; player.currentAmmo = player.maxAmmo; } }];
+            pool.sort(() => 0.5 - Math.random()).slice(0, 2).forEach(card => {
                 const div = document.createElement('div'); div.className = 'upgrade-card';
                 div.innerHTML = `<div class="card-title">${card.name}</div><div class="card-desc">${card.desc}</div>`;
-                div.onclick = () => {
-                    card.apply(); updateAmmoDisplay(); difficultyMultiplier += 0.15; 
-                    document.getElementById('upgradeModal').style.display = 'none'; isPaused = false;
-                };
+                div.onclick = () => { card.apply(); updateAmmoDisplay(); document.getElementById('upgradeModal').style.display = 'none'; isPaused = false; };
                 container.appendChild(div);
             });
         }
 
-        let bossSpawnedAt = 0;
+        // 스테이지 로직
+        function spawnBoss() {
+            bossActive = true;
+            const warning = document.getElementById('bossWarning'); warning.style.display = 'block'; setTimeout(() => { warning.style.display = 'none'; }, 3000);
+            
+            const isStrong = (stage % 3 === 0);
+            const hp = (isStrong ? 150 : 50) * stage * 0.8; 
+            const radius = isStrong ? 80 : 50; const color = isStrong ? '#8a2be2' : '#ff0055';
+            const x = canvas.width/2; const y = -100;
+            enemies.push(new Enemy(x, y, radius, color, {x: 1.5, y: 1.5}, hp, 'boss', true));
+        }
+
+        let spawner;
         function spawnEnemies() {
-            setInterval(() => {
+            spawner = setInterval(() => {
                 if (!gameActive || isPaused) return;
                 
-                // 30킬마다 보스
-                if(score > 0 && score % 30 === 0 && score !== bossSpawnedAt) {
-                    bossSpawnedAt = score;
-                    const warning = document.getElementById('bossWarning');
-                    warning.style.display = 'block'; setTimeout(() => { warning.style.display = 'none'; }, 3000);
-                    const hp = 80 * difficultyMultiplier; const radius = 50;
-                    const x = Math.random() < 0.5 ? -radius : canvas.width + radius; const y = Math.random() * canvas.height;
-                    const angle = Math.atan2(player.y - y, player.x - x);
-                    enemies.push(new Enemy(x, y, radius, '#ff0055', {x: Math.cos(angle)*1.2, y: Math.sin(angle)*1.2}, hp, 'boss', true));
-                    return; // 보스 뜰 땐 잡몹 1턴 스킵
+                // 스테이지당 목표 킬수 도달 시 잡몹 중지 & 보스 스폰
+                const goal = 20 + (stage * 5);
+                if(killsInStage >= goal) {
+                    if(!bossActive) spawnBoss();
+                    return; // 잡몹 스폰 멈춤
                 }
 
                 const rand = Math.random(); let r, c, vMult, hp, type;
@@ -588,155 +566,153 @@
                 else if (rand < 0.8) { r=12; c='#00f3ff'; vMult=5.5; hp=1; type='fast'; }
                 else { r=35; c='#ff8c00'; vMult=1.2; hp=8; type='tank'; }
 
-                hp = Math.floor(hp * difficultyMultiplier); vMult = vMult * (1 + (difficultyMultiplier - 1) * 0.3);
+                hp = Math.floor(hp * (1 + stage*0.2)); vMult = vMult * (1 + stage*0.1);
                 let x, y;
                 if (Math.random() < 0.5) { x = Math.random() < 0.5 ? -r : canvas.width + r; y = Math.random() * canvas.height; } 
                 else { x = Math.random() * canvas.width; y = Math.random() < 0.5 ? -r : canvas.height + r; }
 
                 const angle = Math.atan2(player.y - y, player.x - x);
                 enemies.push(new Enemy(x, y, r, c, {x: Math.cos(angle)*vMult, y: Math.sin(angle)*vMult}, hp, type));
-            }, Math.max(500, 1200 - (difficultyMultiplier * 100)));
+            }, Math.max(500, 1200 - (stage * 100)));
         }
 
-        // --- 조작 시스템 (마우스 상시 추적) ---
+        // --- 조작 세팅 ---
         function setupJoystick(zoneId, knobId, callback) {
-            const zone = document.getElementById(zoneId); const knob = document.getElementById(knobId);
-            let active = false; let center = {x:0, y:0}; const maxR = 40;
-
-            zone.addEventListener('touchstart', (e) => {
-                e.preventDefault(); active = true; const rect = zone.getBoundingClientRect(); center = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 };
-                moveKnob(e.changedTouches[0]);
-            });
+            const zone = document.getElementById(zoneId); const knob = document.getElementById(knobId); let active = false; let center = {x:0, y:0}; const maxR = 40;
+            zone.addEventListener('touchstart', (e) => { e.preventDefault(); active=true; const rect=zone.getBoundingClientRect(); center={x:rect.left+rect.width/2, y:rect.top+rect.height/2}; moveKnob(e.changedTouches[0]); });
             zone.addEventListener('touchmove', (e) => { e.preventDefault(); if(active) moveKnob(e.changedTouches[0]); });
-            zone.addEventListener('touchend', (e) => { e.preventDefault(); active = false; knob.style.transform = `translate(-50%, -50%)`; callback({x:0, y:0}, false); });
-
+            zone.addEventListener('touchend', (e) => { e.preventDefault(); active=false; knob.style.transform=`translate(-50%, -50%)`; callback({x:0, y:0}, false); });
             function moveKnob(touch) {
-                let dx = touch.clientX - center.x; let dy = touch.clientY - center.y; let dist = Math.hypot(dx, dy);
-                if (dist > maxR) { dx = (dx/dist)*maxR; dy = (dy/dist)*maxR; }
+                let dx=touch.clientX-center.x, dy=touch.clientY-center.y, dist=Math.hypot(dx,dy);
+                if(dist>maxR) { dx=(dx/dist)*maxR; dy=(dy/dist)*maxR; }
                 knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-                let nX = dx/maxR; let nY = dy/maxR; if(Math.hypot(nX, nY) < 0.1) { nX = 0; nY = 0; }
-                callback({ x: nX, y: nY }, true);
+                let nX=dx/maxR, nY=dy/maxR; if(Math.hypot(nX,nY)<0.1){nX=0;nY=0;} callback({x:nX, y:nY}, true);
             }
         }
+        let leftVector={x:0,y:0}, isLeftActive=false, rightVector={x:0,y:0}, isRightActive=false;
+        setupJoystick('joystick-left', 'knob-left', (v,a)=>{leftVector=v; isLeftActive=a;}); setupJoystick('joystick-right', 'knob-right', (v,a)=>{rightVector=v; isRightActive=a;});
 
-        let leftVector = {x:0, y:0}; let isLeftActive = false;
-        let rightVector = {x:0, y:0}; let isRightActive = false;
-        setupJoystick('joystick-left', 'knob-left', (v, a) => { leftVector = v; isLeftActive = a; });
-        setupJoystick('joystick-right', 'knob-right', (v, a) => { rightVector = v; isRightActive = a; });
-
-        const keys = { w: false, a: false, s: false, d: false };
-        let isMouseDown = false; let mouseAngle = 0;
-        
-        window.addEventListener('keydown', (e) => { if(e.key.toLowerCase() === 'r') reload(); if(keys.hasOwnProperty(e.key.toLowerCase())) keys[e.key.toLowerCase()] = true; });
-        window.addEventListener('keyup', (e) => { if(keys.hasOwnProperty(e.key.toLowerCase())) keys[e.key.toLowerCase()] = false; });
-        window.addEventListener('mousedown', () => { isMouseDown = true; });
-        window.addEventListener('mouseup', () => isMouseDown = false);
-        window.addEventListener('mousemove', (e) => { mouseAngle = Math.atan2(e.clientY - player.y, e.clientX - player.x); }); // 상시 갱신
+        const keys={w:false,a:false,s:false,d:false}; let isMouseDown=false, mouseAngle=0;
+        window.addEventListener('keydown', (e) => { if(e.key.toLowerCase()==='r') reload(); if(keys.hasOwnProperty(e.key.toLowerCase())) keys[e.key.toLowerCase()]=true; });
+        window.addEventListener('keyup', (e) => { if(keys.hasOwnProperty(e.key.toLowerCase())) keys[e.key.toLowerCase()]=false; });
+        window.addEventListener('mousedown', () => { isMouseDown=true; }); window.addEventListener('mouseup', () => isMouseDown=false; );
+        window.addEventListener('mousemove', (e) => { mouseAngle = Math.atan2(e.clientY - player.y, e.clientX - player.x); });
 
         function updateHealth() {
             let hpText = "HP: "; for(let i=0; i<player.health; i++) hpText += "❤️";
+            if(player.shield > 0) hpText += " 🛡️";
             document.getElementById('healthDisplay').innerText = hpText;
             if (player.health <= 0) {
                 gameActive = false; 
-                userData.diamonds += earnedDiamonds; saveData();
+                userData.diamonds += earnedDiamonds; userData.totalKills += score; saveData();
+                
+                const survived = Math.floor((Date.now() - startTime)/1000);
+                document.getElementById('statTime').innerText = `${Math.floor(survived/60)}분 ${survived%60}초`;
+                document.getElementById('statStage').innerText = stage;
+                document.getElementById('statKills').innerText = score;
+                document.getElementById('statDia').innerText = `+${earnedDiamonds}`;
                 document.getElementById('gameOverModal').style.display = 'flex';
-                document.getElementById('finalScore').innerText = `최종 처치 수: ${score}`;
-                document.getElementById('earnedDia').innerText = `전리품 다이아: +${earnedDiamonds}`;
             }
         }
 
+        // --- 메인 루프 ---
         function animate() {
+            if (!gameActive) return;
             requestAnimationFrame(animate);
-            if (!gameActive || isPaused) return;
+            if (isPaused) return;
 
-            ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            drawStars();
+            ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height); drawStars();
 
-            if (userData.equipWeapon !== 'sword' && player.currentAmmo === 0 && !player.isReloading && Date.now() - player.emptyTime > 3000) {
-                showNotification("자동 재장전..."); reload();
-            }
+            if (player.wType !== 'sword' && player.currentAmmo === 0 && !player.isReloading && Date.now() - player.emptyTime > 3000) reload();
 
-            let moveX = 0, moveY = 0;
-            if (keys.a) moveX -= 1; if (keys.d) moveX += 1;
-            if (keys.w) moveY -= 1; if (keys.s) moveY += 1;
-            
-            if (moveX !== 0 || moveY !== 0) { const len = Math.hypot(moveX, moveY); moveX /= len; moveY /= len; }
-            if (isLeftActive) { moveX = leftVector.x; moveY = leftVector.y; }
+            let moveX=0, moveY=0;
+            if(keys.a) moveX-=1; if(keys.d) moveX+=1; if(keys.w) moveY-=1; if(keys.s) moveY+=1;
+            if(moveX!==0||moveY!==0) { const len=Math.hypot(moveX,moveY); moveX/=len; moveY/=len; }
+            if(isLeftActive) { moveX=leftVector.x; moveY=leftVector.y; }
 
-            if (player.x + moveX * player.speed > 20 && player.x + moveX * player.speed < canvas.width - 20) player.x += moveX * player.speed;
-            if (player.y + moveY * player.speed > 20 && player.y + moveY * player.speed < canvas.height - 20) player.y += moveY * player.speed;
+            if(player.x+moveX*player.speed>20 && player.x+moveX*player.speed<canvas.width-20) player.x+=moveX*player.speed;
+            if(player.y+moveY*player.speed>20 && player.y+moveY*player.speed<canvas.height-20) player.y+=moveY*player.speed;
 
-            // 회전: 1. 오른쪽 조이스틱 2. 마우스 커서 상시 3. 이동방향
-            if (isRightActive && Math.hypot(rightVector.x, rightVector.y) > 0) player.angle = Math.atan2(rightVector.y, rightVector.x);
-            else if (window.innerWidth >= 800) player.angle = mouseAngle; // PC에선 상시 마우스 바라봄
-            else if (moveX !== 0 || moveY !== 0) player.angle = Math.atan2(moveY, moveX);
+            if(isRightActive && Math.hypot(rightVector.x, rightVector.y)>0) player.angle = Math.atan2(rightVector.y, rightVector.x);
+            else if(window.innerWidth>=800) player.angle = mouseAngle;
+            else if(moveX!==0||moveY!==0) player.angle = Math.atan2(moveY, moveX);
 
             player.draw();
+            if(isRightActive || isMouseDown) shoot();
 
-            if (isRightActive || isMouseDown) shoot();
-
-            projectiles.forEach((p, index) => {
-                p.update(); 
-                if (p.life <= 0 || p.x < 0 || p.x > canvas.width || p.y < 0 || p.y > canvas.height) projectiles.splice(index, 1);
-            });
-
-            // 적 탄막 처리
-            enemyProjectiles.forEach((ep, index) => {
-                ep.update();
-                if(ep.x < 0 || ep.x > canvas.width || ep.y < 0 || ep.y > canvas.height) { enemyProjectiles.splice(index, 1); return; }
-                if (Math.hypot(player.x - ep.x, player.y - ep.y) - ep.radius - player.radius < 1) {
-                    enemyProjectiles.splice(index, 1); player.health -= 1; playSfx('hit'); updateHealth();
-                    ctx.fillStyle = 'rgba(255, 0, 85, 0.4)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // 아이템 처리
+            items.forEach((item, idx) => {
+                item.update();
+                if(item.life <= 0) items.splice(idx, 1);
+                else if(Math.hypot(player.x - item.x, player.y - item.y) < player.radius + item.radius) {
+                    items.splice(idx, 1); if(player.health < player.maxHealth) player.health++; updateHealth(); playSfx('hit');
                 }
             });
 
-            // 적 몹 처리
-            enemies.forEach((enemy, enemyIndex) => {
+            projectiles.forEach((p, idx) => { p.update(); if(p.life<=0 || p.x<0 || p.x>canvas.width || p.y<0 || p.y>canvas.height) projectiles.splice(idx, 1); });
+
+            enemyProjectiles.forEach((ep, idx) => {
+                ep.update(); if(ep.x<0 || ep.x>canvas.width || ep.y<0 || ep.y>canvas.height) { enemyProjectiles.splice(idx, 1); return; }
+                if (Math.hypot(player.x - ep.x, player.y - ep.y) - ep.radius - player.radius < 1) {
+                    enemyProjectiles.splice(idx, 1);
+                    if(player.shield > 0) player.shield--; else player.health--;
+                    playSfx('hit'); updateHealth(); ctx.fillStyle = 'rgba(255, 0, 85, 0.4)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                }
+            });
+
+            enemies.forEach((enemy, eIdx) => {
                 enemy.update();
                 if (Math.hypot(player.x - enemy.x, player.y - enemy.y) - enemy.radius - player.radius < 1) {
-                    enemies.splice(enemyIndex, 1); player.health -= enemy.isBoss ? 2 : 1; playSfx('hit'); updateHealth(); 
-                    ctx.fillStyle = 'rgba(255, 0, 85, 0.4)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    if(player.shield > 0) player.shield--; else player.health -= enemy.isBoss?2:1; 
+                    playSfx('hit'); updateHealth(); ctx.fillStyle='rgba(255,0,85,0.4)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+                    if(!enemy.isBoss) enemies.splice(eIdx, 1);
                 }
-                projectiles.forEach((p, pIndex) => {
-                    // 검 처리는 거리와 앞쪽 반경 체크 로직
+                projectiles.forEach((p, pIdx) => {
                     let isHit = false;
                     if(p.type === 'sword') {
-                        const dist = Math.hypot(enemy.x - player.x, enemy.y - player.y);
-                        if(dist < p.radius + enemy.radius + 15) {
-                            // 부채꼴 내부에 있는지 각도 계산
-                            let angleToEnemy = Math.atan2(enemy.y - player.y, enemy.x - player.x);
-                            let angleDiff = Math.abs(angleToEnemy - player.angle);
-                            if (angleDiff > Math.PI) angleDiff = 2 * Math.PI - angleDiff;
-                            if (angleDiff < Math.PI/2) isHit = true;
+                        if(Math.hypot(enemy.x-player.x, enemy.y-player.y) < p.radius+enemy.radius) {
+                            let aDiff = Math.abs(Math.atan2(enemy.y-player.y, enemy.x-player.x) - player.angle);
+                            if(aDiff > Math.PI) aDiff = 2*Math.PI - aDiff;
+                            if(aDiff < Math.PI/2) isHit = true;
                         }
-                    } else {
-                        isHit = (Math.hypot(p.x - enemy.x, p.y - enemy.y) - enemy.radius - p.radius < 1);
-                    }
+                    } else { isHit = (Math.hypot(p.x-enemy.x, p.y-enemy.y) - enemy.radius - p.radius < 1); }
 
                     if (isHit && !p.hitSet.has(enemy)) {
-                        p.hitSet.add(enemy); // 중복 타격 방지
-                        if(p.type !== 'laser' && p.type !== 'sword') projectiles.splice(pIndex, 1); 
-                        
+                        p.hitSet.add(enemy); if(p.type !== 'laser' && p.type !== 'sword') projectiles.splice(pIdx, 1);
                         enemy.health -= p.damage;
                         if (enemy.health <= 0) {
-                            playSfx('hit'); enemies.splice(enemyIndex, 1); 
-                            score += 1; document.getElementById('scoreDisplay').innerText = `처치: ${score}`;
+                            playSfx('hit'); enemies.splice(eIdx, 1);
                             
-                            // 몬스터 종류별 보상
-                            let expGain = 1, diaGain = 1;
-                            if(enemy.type === 'tank') { expGain = 3; diaGain = 3; }
-                            if(enemy.isBoss) { expGain = 20; diaGain = 50; }
-                            
-                            earnedDiamonds += diaGain;
-                            gainExp(expGain);
+                            if(enemy.isBoss) {
+                                score+=10; earnedDiamonds+=50; gainExp(50);
+                                bossActive = false; stage++; killsInStage = 0;
+                                document.getElementById('stageDisplay').innerText = `STAGE ${stage}`;
+                                items.push(new Item(canvas.width/2, canvas.height/2)); // 스테이지 클리어 물약
+                                if(userData.equipSkin === 'shield') player.shield = 1; // 쉴드 충전
+                            } else {
+                                score+=1; killsInStage+=1; earnedDiamonds += (enemy.type==='tank'?3:1); gainExp(enemy.type==='tank'?3:1);
+                            }
+                            document.getElementById('scoreDisplay').innerText = `처치: ${score}`;
                         }
                     }
                 });
             });
         }
 
-        function startGame() { 
-            gameActive = true; spawnEnemies(); updateAmmoDisplay(); animate(); 
+        // --- 초기화 및 시작 ---
+        function startGame() {
+            // 변수 초기화
+            score=0; earnedDiamonds=0; playerLevel=1; currentExp=0; expToNext=10; stage=1; killsInStage=0; bossActive=false;
+            projectiles=[]; enemyProjectiles=[]; enemies=[]; items=[];
+            player = new Player();
+            
+            document.getElementById('stageDisplay').innerText = `STAGE 1`; document.getElementById('scoreDisplay').innerText = `처치: 0`;
+            document.getElementById('expFill').style.width = `0%`; document.getElementById('expText').innerText = `0 / 10`;
+            document.getElementById('levelDisplay').innerText = `LEVEL 1`;
+            
+            clearInterval(spawner); updateHealth(); updateAmmoDisplay();
+            startTime = Date.now(); gameActive = true; 
+            spawnEnemies(); requestAnimationFrame(animate); 
         }
         window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
     </script>
