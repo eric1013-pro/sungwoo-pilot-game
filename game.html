@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>트릭이 키우기 (VIP Edition)</title>
+    <title>트릭이 파일럿 만들기</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700;900&family=Orbitron:wght@900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700;900&family=Orbitron:wght@700;900&display=swap');
 
         body {
             margin: 0; padding: 0;
-            background-color: #050508;
+            background-color: #030a12;
             color: white;
             font-family: 'Noto Sans KR', sans-serif;
             overflow: hidden;
@@ -18,120 +18,164 @@
             -webkit-user-select: none;
         }
 
-        /* 👑 고급스러운 인트로 화면 */
-        #introScreen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #1a0b2e 0%, #050508 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
+        /* 🎬 제작사 인트로 화면 */
+        #studioIntro {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 200;
+            transition: opacity 1s ease-out;
         }
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: 5px;
+            animation: glitchReveal 2s ease-in-out;
+        }
+        .t-white { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        .t-e { color: #00f3ff; text-shadow: 0 0 20px #00f3ff, 0 0 40px #00f3ff; display: inline-block; margin-right: 5px; }
+        .t-3 { color: #00ff88; text-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88; display: inline-block; margin-left: 5px; }
+        
+        @keyframes glitchReveal {
+            0% { opacity: 0; transform: scale(0.8); filter: blur(10px); }
+            50% { opacity: 1; transform: scale(1.05); filter: blur(0px); }
+            100% { transform: scale(1); }
+        }
+
+        /* 🌌 메인 인트로 화면 (블루 & 그린 계열) */
+        #introScreen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #0a2342 0%, #030a12 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 100;
+            transition: opacity 0.5s;
+        }
+        
+        /* ✨ 게임 속으로 빨려 들어가는 워프 효과 */
+        .warp-active {
+            animation: warpIn 1.2s cubic-bezier(0.7, 0, 0.3, 1) forwards !important;
+        }
+        @keyframes warpIn {
+            0% { transform: scale(1); filter: blur(0px); opacity: 1; }
+            40% { filter: blur(5px); opacity: 0.8; }
+            100% { transform: scale(15); filter: blur(30px); opacity: 0; }
+        }
+
+        /* 💰 자발적 후원 문구 (깜빡임 효과) */
+        .donation-text {
+            position: absolute; top: 30px; left: 50%;
+            transform: translateX(-50%);
+            color: #00ff88;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+            animation: fastBlink 1s infinite;
+            width: 100%; text-align: center;
+        }
+        @keyframes fastBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
         .intro-title {
             font-family: 'Orbitron', 'Noto Sans KR', sans-serif;
-            font-size: 4rem;
-            color: #ffd700;
-            text-shadow: 0 0 10px #ffd700, 0 0 30px #ff8c00, 0 0 60px #ff0080;
+            font-size: 4.5rem;
+            color: #00f3ff;
+            text-shadow: 0 0 10px #00f3ff, 0 0 30px #00f3ff, 0 0 50px #00ff88;
             margin-bottom: 50px;
-            text-align: center;
             animation: floatTitle 3s ease-in-out infinite;
         }
-        @keyframes floatTitle {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
+        @keyframes floatTitle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        
         .btn-enter {
-            background: linear-gradient(45deg, #ff8c00, #ff0080);
-            color: white;
-            font-size: 1.5rem;
+            background: transparent;
+            color: #00ff88;
+            font-size: 1.6rem;
             font-weight: 900;
             padding: 15px 60px;
-            border: 2px solid #ffd700;
-            border-radius: 50px;
+            border: 3px solid #00ff88;
+            border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            transition: 0.3s;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4), inset 0 0 15px rgba(0, 255, 136, 0.2);
+            transition: 0.2s;
             font-family: 'Noto Sans KR', sans-serif;
+            text-transform: uppercase;
         }
-        .btn-enter:active { transform: scale(0.95); box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+        .btn-enter:hover { background: #00ff88; color: #000; box-shadow: 0 0 40px #00ff88; }
+        .btn-enter:active { transform: scale(0.95); }
 
         /* UI 레이어 */
-        #ui-layer { position: absolute; top: 20px; left: 20px; pointer-events: none; z-index: 10; }
-        #scoreDisplay { font-size: 26px; font-weight: 900; color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.8); }
-        #healthDisplay { font-size: 22px; color: #ff0055; margin-top: 10px; text-shadow: 0 0 10px rgba(255, 0, 85, 0.8); }
+        #ui-layer { position: absolute; top: 20px; left: 20px; pointer-events: none; z-index: 10; display: none; }
+        #scoreDisplay { font-size: 26px; font-weight: 900; color: #00ff88; text-shadow: 0 0 10px rgba(0, 255, 136, 0.8); }
+        #healthDisplay { font-size: 22px; color: #ff0055; margin-top: 10px; }
         #ammoDisplay { font-size: 22px; color: #00f3ff; font-weight: bold; margin-top: 10px; text-shadow: 0 0 10px rgba(0, 243, 255, 0.8); }
 
-        /* ⚠️ 보스 경고 문구 */
         #bossWarning {
-            position: absolute;
-            top: 20%; left: 50%;
-            transform: translateX(-50%);
-            font-size: 3rem;
-            font-weight: 900;
-            color: #ff0000;
-            text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
-            display: none;
-            z-index: 20;
-            animation: blink 0.5s infinite;
+            position: absolute; top: 20%; left: 50%; transform: translateX(-50%);
+            font-size: 3.5rem; font-weight: 900; color: #ff0055;
+            text-shadow: 0 0 20px #ff0055, 0 0 40px #ff0055;
+            display: none; z-index: 20; animation: blink 0.5s infinite;
         }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* 모바일 트윈 스틱 (왼쪽: 이동, 오른쪽: 공격) */
+        /* 모바일 트윈 조이스틱 */
         .joystick-zone {
             position: absolute; bottom: 40px; width: 130px; height: 130px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%; z-index: 15;
+            background: rgba(0, 243, 255, 0.05); border: 2px solid rgba(0, 243, 255, 0.2);
+            border-radius: 50%; z-index: 15; display: none;
         }
         #joystick-left { left: 40px; }
-        #joystick-right { right: 40px; border-color: rgba(255, 0, 85, 0.3); }
+        #joystick-right { right: 40px; border-color: rgba(0, 255, 136, 0.3); }
         .joystick-knob {
             position: absolute; top: 50%; left: 50%; width: 50px; height: 50px;
             border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none;
         }
         #knob-left { background: rgba(0, 243, 255, 0.6); box-shadow: 0 0 15px #00f3ff; }
-        #knob-right { background: rgba(255, 0, 85, 0.6); box-shadow: 0 0 15px #ff0055; }
+        #knob-right { background: rgba(0, 255, 136, 0.6); box-shadow: 0 0 15px #00ff88; }
 
         /* 팝업 모달 */
         .modal {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 5, 15, 0.85); backdrop-filter: blur(5px);
             display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 30;
         }
         .modal-content {
-            background: #111; padding: 40px; border-radius: 20px; border: 2px solid #ffd700;
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.3); text-align: center;
+            background: #030a12; padding: 40px; border-radius: 15px; border: 2px solid #00f3ff;
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.3); text-align: center;
         }
-        .modal h1 { color: #ffd700; font-size: 2rem; margin-top: 0; text-shadow: 0 0 15px #ffd700; }
+        .modal h1 { color: #00f3ff; font-family: 'Orbitron', sans-serif; font-size: 2.5rem; margin-top: 0; text-shadow: 0 0 15px #00f3ff; }
         
         .card-container { display: flex; gap: 20px; margin-top: 30px; flex-wrap: wrap; justify-content: center; }
         .upgrade-card {
-            background: #1a0b2e; border: 2px solid #00f3ff; border-radius: 15px; padding: 20px;
-            width: 180px; cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+            background: #0a1526; border: 2px solid #00ff88; border-radius: 10px; padding: 20px;
+            width: 180px; cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
         }
-        .upgrade-card:hover { transform: translateY(-10px); background: #00f3ff; color: #000; box-shadow: 0 0 30px #00f3ff; }
+        .upgrade-card:hover { transform: translateY(-10px); background: #00ff88; color: #000; box-shadow: 0 0 30px #00ff88; }
         .card-title { font-size: 20px; font-weight: 900; margin-bottom: 10px; }
-        .card-desc { font-size: 14px; color: #ddd; }
-        .upgrade-card:hover .card-desc { color: #222; }
+        .card-desc { font-size: 14px; color: #ccc; }
+        .upgrade-card:hover .card-desc { color: #111; }
 
         canvas { display: block; }
         
         @media (min-width: 800px) {
-            #joystick-left, #joystick-right { display: none; } /* PC에선 조이스틱 숨김 */
+            .joystick-zone { display: none !important; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 👑 인트로 화면 -->
-    <div id="introScreen">
-        <div class="intro-title">트릭이 키우기</div>
-        <button class="btn-enter" onclick="startGame()">입장하기</button>
+    <!-- 🎬 제작사 인트로 -->
+    <div id="studioIntro">
+        <div class="logo-text">
+            <span class="t-white">THR</span><span class="t-e">E</span><span class="t-3">3</span><span class="t-white">RIC</span>
+        </div>
     </div>
 
-    <!-- UI 요소 -->
+    <!-- 🌌 메인 화면 -->
+    <div id="introScreen" style="display: none;">
+        <div class="donation-text">트릭이의 계좌로 자발적 후원을 해주세요 9003259257108 새마을 금고</div>
+        <div class="intro-title">트릭이 키우기</div>
+        <button class="btn-enter" onclick="triggerWarp()">START GAME</button>
+    </div>
+
+    <!-- 🎮 게임 UI -->
     <div id="ui-layer">
         <div id="scoreDisplay">처치: 0</div>
         <div id="healthDisplay">HP: ❤️❤️❤️</div>
@@ -140,15 +184,14 @@
     
     <div id="bossWarning">⚠️ 보스몹 등장 ⚠️</div>
 
-    <!-- 모바일 전용 트윈 조이스틱 -->
     <div id="joystick-left" class="joystick-zone"><div id="knob-left" class="joystick-knob"></div></div>
     <div id="joystick-right" class="joystick-zone"><div id="knob-right" class="joystick-knob"></div></div>
 
     <!-- 업그레이드 모달 -->
     <div id="upgradeModal" class="modal">
         <div class="modal-content">
-            <h1>LEVEL UP!</h1>
-            <p style="color: #ccc;">적들이 더욱 강해집니다. 능력을 선택하세요.</p>
+            <h1>SYSTEM UPGRADE</h1>
+            <p style="color: #ccc;">적들이 더욱 강해집니다. 파츠를 선택하세요.</p>
             <div class="card-container" id="cardContainer"></div>
         </div>
     </div>
@@ -156,9 +199,9 @@
     <!-- 게임 오버 모달 -->
     <div id="gameOverModal" class="modal">
         <div class="modal-content" style="border-color: #ff0055; box-shadow: 0 0 40px rgba(255, 0, 85, 0.4);">
-            <h1 style="color: #ff0055; text-shadow: 0 0 15px #ff0055;">TRICKY DIED</h1>
-            <p id="finalScore" style="font-size: 24px;">최종 처치 수: 0</p>
-            <button class="btn-enter" onclick="location.reload()" style="margin-top:20px; font-size: 1.2rem;">다시 도전</button>
+            <h1 style="color: #ff0055; text-shadow: 0 0 20px #ff0055;">RESPAWN?</h1>
+            <p id="finalScore" style="font-size: 24px; color: #fff;">최종 처치 수: 0</p>
+            <button class="btn-enter" onclick="location.reload()" style="margin-top:20px; font-size: 1.2rem; border-color:#ff0055; color:#ff0055; box-shadow: 0 0 20px rgba(255,0,85,0.4);">재도전</button>
         </div>
     </div>
 
@@ -170,80 +213,98 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        // --- 전역 변수 설정 ---
-        let score = 0;
-        let lastUpgradeScore = 0;
-        let lastBossScore = 0;
-        let difficultyMultiplier = 1.0; // 난이도 계수
-        let gameActive = false;
-        let isPaused = false;
-        let animationId;
+        // --- 인트로 시퀀스 ---
+        window.onload = () => {
+            setTimeout(() => {
+                const studio = document.getElementById('studioIntro');
+                studio.style.opacity = '0';
+                setTimeout(() => {
+                    studio.style.display = 'none';
+                    document.getElementById('introScreen').style.display = 'flex';
+                }, 1000);
+            }, 2500); // 2.5초간 로고 보여줌
+        };
 
-        // --- 그리기 헬퍼 함수 ---
+        // 워프 이펙트 및 게임 시작
+        function triggerWarp() {
+            const intro = document.getElementById('introScreen');
+            intro.classList.add('warp-active');
+            
+            setTimeout(() => {
+                intro.style.display = 'none';
+                document.getElementById('ui-layer').style.display = 'block';
+                if(window.innerWidth < 800) {
+                    document.getElementById('joystick-left').style.display = 'block';
+                    document.getElementById('joystick-right').style.display = 'block';
+                }
+                startGame();
+            }, 1000); // 워프 애니메이션 끝날 때쯤 게임 시작
+        }
+
+        // --- 전역 변수 ---
+        let score = 0, lastUpgradeScore = 0, lastBossScore = 0;
+        let difficultyMultiplier = 1.0;
+        let gameActive = false, isPaused = false, animationId;
+
+        // --- 폴리곤 그리기 함수 ---
         function drawPolygon(ctx, x, y, radius, sides, color, rotation) {
-            ctx.save();
-            ctx.translate(x, y);
-            ctx.rotate(rotation);
+            ctx.save(); ctx.translate(x, y); ctx.rotate(rotation);
             ctx.beginPath();
             for (let i = 0; i < sides; i++) {
                 const angle = (i * 2 * Math.PI) / sides;
                 ctx.lineTo(radius * Math.cos(angle), radius * Math.sin(angle));
             }
             ctx.closePath();
-            ctx.fillStyle = color;
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = color;
-            ctx.fill();
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = '#fff';
-            ctx.stroke();
+            ctx.fillStyle = color; ctx.shadowBlur = 15; ctx.shadowColor = color; ctx.fill();
+            ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
             ctx.restore();
         }
 
-        // --- 클래스 ---
+        // --- 🚀 직관적인 전투기 디자인 캐릭터 ---
         class Player {
             constructor(x, y) {
                 this.x = x; this.y = y; this.radius = 20;
-                this.speed = 5; this.health = 3; this.maxHealth = 3;
+                this.speed = 6; this.health = 3; this.maxHealth = 3;
                 this.damage = 1; this.maxAmmo = 10; this.currentAmmo = 10;
-                this.fireDelay = 250; this.lastShotTime = 0; this.isReloading = false;
+                this.fireDelay = 200; this.lastShotTime = 0; this.isReloading = false;
+                this.angle = 0; // 바라보는 방향
             }
             draw() {
-                // 고퀄리티 트릭이 디자인 (빛나는 코어 + 회전하는 아우라)
-                const time = Date.now() * 0.002;
                 ctx.save();
                 ctx.translate(this.x, this.y);
-                
-                // 회전하는 아우라
-                ctx.rotate(time);
+                ctx.rotate(this.angle);
+
+                // 전투기 본체 (화살표 모양)
                 ctx.beginPath();
-                ctx.arc(0, 0, this.radius + 8, 0, Math.PI * 1.5);
-                ctx.strokeStyle = '#00f3ff';
+                ctx.moveTo(this.radius * 1.2, 0); // 코 (Nose)
+                ctx.lineTo(-this.radius * 0.8, this.radius * 0.8); // 우측 날개
+                ctx.lineTo(-this.radius * 0.3, 0); // 꼬리 중앙
+                ctx.lineTo(-this.radius * 0.8, -this.radius * 0.8); // 좌측 날개
+                ctx.closePath();
+
+                ctx.fillStyle = '#0a1526';
+                ctx.fill();
                 ctx.lineWidth = 3;
-                ctx.shadowBlur = 10;
+                ctx.strokeStyle = '#00f3ff';
+                ctx.shadowBlur = 15;
                 ctx.shadowColor = '#00f3ff';
                 ctx.stroke();
-                
-                // 빛나는 코어
-                ctx.rotate(-time); // 코어는 고정
+
+                // 중앙 코어 엔진
                 ctx.beginPath();
-                ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = '#1a0b2e';
+                ctx.arc(-this.radius * 0.1, 0, this.radius * 0.25, 0, Math.PI * 2);
+                ctx.fillStyle = '#00ff88';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#00ff88';
                 ctx.fill();
-                ctx.beginPath();
-                ctx.arc(0, 0, this.radius - 5, 0, Math.PI * 2);
-                ctx.fillStyle = '#ffd700';
-                ctx.shadowBlur = 20;
-                ctx.shadowColor = '#ffd700';
-                ctx.fill();
-                
+
                 ctx.restore();
             }
         }
 
         class Projectile {
             constructor(x, y, velocity, damage) {
-                this.x = x; this.y = y; this.radius = 8;
+                this.x = x; this.y = y; this.radius = 6;
                 this.velocity = velocity; this.damage = damage;
             }
             draw() {
@@ -251,7 +312,7 @@
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                 ctx.fillStyle = '#fff';
                 ctx.shadowBlur = 15;
-                ctx.shadowColor = '#ff0080';
+                ctx.shadowColor = '#00ff88';
                 ctx.fill();
             }
             update() { this.draw(); this.x += this.velocity.x; this.y += this.velocity.y; }
@@ -264,26 +325,18 @@
                 this.type = type; this.isBoss = isBoss; this.rotation = 0;
             }
             draw() {
-                this.rotation += 0.02; // 빙글빙글 회전
-                if(this.isBoss) {
-                    drawPolygon(ctx, this.x, this.y, this.radius, 8, this.color, -this.rotation); // 보스는 8각형
-                } else if(this.type === 'fast') {
-                    drawPolygon(ctx, this.x, this.y, this.radius, 3, this.color, this.rotation); // 스피드몹은 삼각형
-                } else if(this.type === 'tank') {
-                    drawPolygon(ctx, this.x, this.y, this.radius, 6, this.color, this.rotation); // 탱커는 육각형
-                } else {
-                    drawPolygon(ctx, this.x, this.y, this.radius, 4, this.color, this.rotation); // 일반은 사각형
-                }
+                this.rotation += 0.02; 
+                if(this.isBoss) drawPolygon(ctx, this.x, this.y, this.radius, 8, this.color, -this.rotation); 
+                else if(this.type === 'fast') drawPolygon(ctx, this.x, this.y, this.radius, 3, this.color, this.rotation); 
+                else if(this.type === 'tank') drawPolygon(ctx, this.x, this.y, this.radius, 6, this.color, this.rotation); 
+                else drawPolygon(ctx, this.x, this.y, this.radius, 4, this.color, this.rotation); 
                 
-                // 체력바
                 const barW = this.radius * 2; const barH = this.isBoss ? 10 : 6;
                 const hpRatio = this.health / this.maxHealth;
-                ctx.fillStyle = '#333';
-                ctx.fillRect(this.x - this.radius, this.y - this.radius - 20, barW, barH);
-                ctx.fillStyle = hpRatio > 0.4 ? '#2ecc71' : '#e74c3c';
+                ctx.fillStyle = '#333'; ctx.fillRect(this.x - this.radius, this.y - this.radius - 20, barW, barH);
+                ctx.fillStyle = hpRatio > 0.4 ? '#00f3ff' : '#ff0055';
                 ctx.fillRect(this.x - this.radius, this.y - this.radius - 20, barW * hpRatio, barH);
-                ctx.strokeStyle = '#fff'; ctx.lineWidth = 1;
-                ctx.strokeRect(this.x - this.radius, this.y - this.radius - 20, barW, barH);
+                ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.strokeRect(this.x - this.radius, this.y - this.radius - 20, barW, barH);
             }
             update() { this.draw(); this.x += this.velocity.x; this.y += this.velocity.y; }
         }
@@ -292,15 +345,11 @@
         const projectiles = [];
         const enemies = [];
 
-        // --- 무기 시스템 ---
+        // --- 무기 & 시스템 ---
         function updateAmmoDisplay() {
             const display = document.getElementById('ammoDisplay');
-            if (player.isReloading) {
-                display.innerText = `장전 중...`; display.style.color = "#ff8c00";
-            } else {
-                display.innerText = `탄창: ${player.currentAmmo} / ${player.maxAmmo}`;
-                display.style.color = player.currentAmmo === 0 ? "#ff0055" : "#00f3ff";
-            }
+            if (player.isReloading) { display.innerText = `장전 중...`; display.style.color = "#ff8c00"; }
+            else { display.innerText = `탄창: ${player.currentAmmo} / ${player.maxAmmo}`; display.style.color = player.currentAmmo === 0 ? "#ff0055" : "#00f3ff"; }
         }
 
         function reload() {
@@ -309,25 +358,24 @@
             setTimeout(() => { player.currentAmmo = player.maxAmmo; player.isReloading = false; updateAmmoDisplay(); }, 1200);
         }
 
-        function shoot(angle) {
+        function shoot() {
             if (!gameActive || isPaused) return;
             const now = Date.now();
             if (now - player.lastShotTime < player.fireDelay) return;
             if (player.currentAmmo <= 0) { reload(); return; }
 
-            const velocity = { x: Math.cos(angle) * 18, y: Math.sin(angle) * 18 };
+            const velocity = { x: Math.cos(player.angle) * 20, y: Math.sin(player.angle) * 20 };
             projectiles.push(new Projectile(player.x, player.y, velocity, player.damage));
             
             player.currentAmmo--; player.lastShotTime = now; updateAmmoDisplay();
         }
 
-        // --- 업그레이드 & 난이도 시스템 ---
         const upgrades = [
-            { name: '🔥 파워 업', desc: '총알 데미지 강력하게 1 상승', apply: () => player.damage += 1 },
-            { name: '📦 탄창 확장', desc: '최대 탄창 수 +5', apply: () => { player.maxAmmo += 5; player.currentAmmo = player.maxAmmo; } },
-            { name: '⚡ 연사 속도', desc: '총알이 더 빨리 나갑니다', apply: () => player.fireDelay = Math.max(50, player.fireDelay - 40) },
-            { name: '👟 부스터 온', desc: '트릭이 이동 속도 증가', apply: () => player.speed += 1.5 },
-            { name: '💖 전면 수리', desc: '체력을 끝까지 회복합니다', apply: () => { player.health = player.maxHealth; updateHealth(); } }
+            { name: '🔥 블래스터 강화', desc: '총알 데미지 강력하게 1 상승', apply: () => player.damage += 1 },
+            { name: '📦 탄창 모듈', desc: '최대 탄창 수 +5', apply: () => { player.maxAmmo += 5; player.currentAmmo = player.maxAmmo; } },
+            { name: '⚡ 연사 엔진', desc: '총알 발사 딜레이 감소', apply: () => player.fireDelay = Math.max(50, player.fireDelay - 40) },
+            { name: '👟 추진기 오버클럭', desc: '기체 이동 속도 증가', apply: () => player.speed += 1.5 },
+            { name: '💖 나노 수리', desc: '체력을 전부 회복합니다', apply: () => { player.health = player.maxHealth; updateHealth(); } }
         ];
 
         function triggerUpgrade() {
@@ -335,16 +383,14 @@
             document.getElementById('upgradeModal').style.display = 'flex';
             const container = document.getElementById('cardContainer');
             container.innerHTML = '';
-
             const shuffled = upgrades.sort(() => 0.5 - Math.random()).slice(0, 2);
             shuffled.forEach(card => {
                 const div = document.createElement('div');
                 div.className = 'upgrade-card';
                 div.innerHTML = `<div class="card-title">${card.name}</div><div class="card-desc">${card.desc}</div>`;
                 div.onclick = () => {
-                    card.apply();
-                    updateAmmoDisplay();
-                    difficultyMultiplier += 0.2; // 🔺 난이도 상승 (몹 피통, 속도 증가)
+                    card.apply(); updateAmmoDisplay();
+                    difficultyMultiplier += 0.25; 
                     document.getElementById('upgradeModal').style.display = 'none';
                     isPaused = false;
                 };
@@ -352,37 +398,27 @@
             });
         }
 
-        // --- 보스 시스템 ---
         function spawnBoss() {
             const warning = document.getElementById('bossWarning');
-            warning.style.display = 'block';
-            setTimeout(() => { warning.style.display = 'none'; }, 3000);
-
-            const hp = 50 * difficultyMultiplier; // 보스 체력 어마어마함
-            const radius = 60;
-            const x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius;
-            const y = Math.random() * canvas.height;
+            warning.style.display = 'block'; setTimeout(() => { warning.style.display = 'none'; }, 3000);
+            const hp = 50 * difficultyMultiplier; const radius = 60;
+            const x = Math.random() < 0.5 ? -radius : canvas.width + radius; const y = Math.random() * canvas.height;
             const angle = Math.atan2(player.y - y, player.x - x);
-            const velocity = { x: Math.cos(angle) * 1.5, y: Math.sin(angle) * 1.5 }; // 보스는 느림
-
-            enemies.push(new Enemy(x, y, radius, '#ff0000', velocity, hp, 'boss', true));
+            const velocity = { x: Math.cos(angle) * 1.5, y: Math.sin(angle) * 1.5 };
+            enemies.push(new Enemy(x, y, radius, '#ff0055', velocity, hp, 'boss', true));
         }
 
-        // --- 적 생성기 ---
         function spawnEnemies() {
             setInterval(() => {
                 if (!gameActive || isPaused) return;
-
                 const rand = Math.random();
                 let r, c, vMult, hp, type;
                 
-                if (rand < 0.5) { r=20; c='#e91e63'; vMult=2.5; hp=2; type='normal'; }
-                else if (rand < 0.8) { r=12; c='#00ff88'; vMult=5; hp=1; type='fast'; }
-                else { r=35; c='#9c27b0'; vMult=1.2; hp=6; type='tank'; }
+                if (rand < 0.5) { r=20; c='#00f3ff'; vMult=2.5; hp=2; type='normal'; }
+                else if (rand < 0.8) { r=12; c='#00ff88'; vMult=5.5; hp=1; type='fast'; }
+                else { r=35; c='#8a2be2'; vMult=1.2; hp=6; type='tank'; }
 
-                // 난이도 계수 적용
-                hp = Math.floor(hp * difficultyMultiplier);
-                vMult = vMult * (1 + (difficultyMultiplier - 1) * 0.5);
+                hp = Math.floor(hp * difficultyMultiplier); vMult = vMult * (1 + (difficultyMultiplier - 1) * 0.4);
 
                 let x, y;
                 if (Math.random() < 0.5) { x = Math.random() < 0.5 ? -r : canvas.width + r; y = Math.random() * canvas.height; } 
@@ -390,57 +426,44 @@
 
                 const angle = Math.atan2(player.y - y, player.x - x);
                 const velocity = { x: Math.cos(angle) * vMult, y: Math.sin(angle) * vMult };
-
                 enemies.push(new Enemy(x, y, r, c, velocity, hp, type));
-            }, Math.max(400, 1000 - (difficultyMultiplier * 100))); // 난이도 오를수록 더 빨리 나옴
+            }, Math.max(400, 1000 - (difficultyMultiplier * 100)));
         }
 
-        // --- 트윈 조이스틱 컨트롤 ---
+        // --- 조작 세팅 (트윈 조이스틱 최적화) ---
         function setupJoystick(zoneId, knobId, callback) {
-            const zone = document.getElementById(zoneId);
-            const knob = document.getElementById(knobId);
+            const zone = document.getElementById(zoneId); const knob = document.getElementById(knobId);
             let active = false; let center = {x:0, y:0}; const maxR = 40;
 
             zone.addEventListener('touchstart', (e) => {
                 e.preventDefault(); active = true;
-                const rect = zone.getBoundingClientRect();
-                center = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 };
+                const rect = zone.getBoundingClientRect(); center = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 };
                 moveKnob(e.changedTouches[0]);
             });
-            zone.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                if(active) {
-                    for(let i=0; i<e.changedTouches.length; i++) {
-                        moveKnob(e.changedTouches[i]);
-                    }
-                }
-            });
+            zone.addEventListener('touchmove', (e) => { e.preventDefault(); if(active) moveKnob(e.changedTouches[0]); });
             zone.addEventListener('touchend', (e) => {
-                e.preventDefault(); active = false;
-                knob.style.transform = `translate(-50%, -50%)`;
+                e.preventDefault(); active = false; knob.style.transform = `translate(-50%, -50%)`;
                 callback({x:0, y:0}, false);
             });
 
             function moveKnob(touch) {
-                // 터치 위치가 현재 존과 가까운지 대략적 확인
-                const rect = zone.getBoundingClientRect();
-                if(touch.clientX < rect.left - 50 || touch.clientX > rect.right + 50) return;
-
                 let dx = touch.clientX - center.x; let dy = touch.clientY - center.y;
                 let dist = Math.hypot(dx, dy);
                 if (dist > maxR) { dx = (dx/dist)*maxR; dy = (dy/dist)*maxR; }
                 knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-                callback({ x: dx/maxR, y: dy/maxR }, true);
+                
+                // 미세한 떨림 방지를 위한 데드존 설정 (10% 이하 입력 무시)
+                let normalizedX = dx/maxR; let normalizedY = dy/maxR;
+                if(Math.hypot(normalizedX, normalizedY) < 0.1) { normalizedX = 0; normalizedY = 0; }
+                callback({ x: normalizedX, y: normalizedY }, true);
             }
         }
 
         let leftVector = {x:0, y:0}; let isLeftActive = false;
         let rightVector = {x:0, y:0}; let isRightActive = false;
-
         setupJoystick('joystick-left', 'knob-left', (v, a) => { leftVector = v; isLeftActive = a; });
         setupJoystick('joystick-right', 'knob-right', (v, a) => { rightVector = v; isRightActive = a; });
 
-        // PC 조작 (WASD + 마우스)
         const keys = { w: false, a: false, s: false, d: false };
         let isMouseDown = false; let mouseAngle = 0;
         
@@ -460,52 +483,58 @@
             }
         }
 
-        // --- 메인 게임 루프 ---
         function animate() {
             requestAnimationFrame(animate);
             if (!gameActive || isPaused) return;
 
-            // 배경 잔상 효과
-            ctx.fillStyle = 'rgba(5, 5, 8, 0.5)';
+            ctx.fillStyle = 'rgba(3, 10, 18, 0.4)'; // 부드러운 잔상
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // 1. 이동 처리 (키보드 or 왼쪽 조이스틱)
+            // 1. 이동 처리 및 대각선 속도 정규화
             let moveX = 0, moveY = 0;
             if (keys.a) moveX -= 1; if (keys.d) moveX += 1;
             if (keys.w) moveY -= 1; if (keys.s) moveY += 1;
+            
+            if (moveX !== 0 || moveY !== 0) {
+                const len = Math.hypot(moveX, moveY);
+                moveX /= len; moveY /= len;
+            }
             if (isLeftActive) { moveX = leftVector.x; moveY = leftVector.y; }
 
             if (player.x + moveX * player.speed > 20 && player.x + moveX * player.speed < canvas.width - 20) player.x += moveX * player.speed;
             if (player.y + moveY * player.speed > 20 && player.y + moveY * player.speed < canvas.height - 20) player.y += moveY * player.speed;
 
-            player.draw();
-
-            // 2. 공격 처리 (오른쪽 조이스틱 연사 or 마우스 클릭 연사)
-            if (isRightActive && Math.hypot(rightVector.x, rightVector.y) > 0.2) {
-                shoot(Math.atan2(rightVector.y, rightVector.x));
-            } else if (isMouseDown) {
-                shoot(mouseAngle);
+            // 2. 캐릭터 회전 방향 (우측 조이스틱 > 마우스 > 이동 방향)
+            if (isRightActive && Math.hypot(rightVector.x, rightVector.y) > 0) {
+                player.angle = Math.atan2(rightVector.y, rightVector.x);
+            } else if (isMouseDown || Object.values(keys).some(v=>v)) {
+                player.angle = mouseAngle;
+            } else if (moveX !== 0 || moveY !== 0) {
+                player.angle = Math.atan2(moveY, moveX);
             }
 
-            // 3. 투사체 업데이트
+            player.draw();
+
+            // 3. 발사 처리
+            if (isRightActive || isMouseDown) shoot();
+
+            // 4. 투사체
             projectiles.forEach((p, index) => {
                 p.update();
                 if (p.x < 0 || p.x > canvas.width || p.y < 0 || p.y > canvas.height) projectiles.splice(index, 1);
             });
 
-            // 4. 적 업데이트 및 충돌
+            // 5. 적 충돌
             enemies.forEach((enemy, enemyIndex) => {
                 enemy.update();
 
-                // 적 vs 플레이어
                 if (Math.hypot(player.x - enemy.x, player.y - enemy.y) - enemy.radius - player.radius < 1) {
                     enemies.splice(enemyIndex, 1);
-                    player.health -= enemy.isBoss ? 2 : 1; // 보스한테 맞으면 2칸 깎임
+                    player.health -= enemy.isBoss ? 2 : 1; 
                     updateHealth();
                     ctx.fillStyle = 'rgba(255, 0, 85, 0.4)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
                 }
 
-                // 적 vs 총알
                 projectiles.forEach((p, pIndex) => {
                     if (Math.hypot(p.x - enemy.x, p.y - enemy.y) - enemy.radius - p.radius < 1) {
                         projectiles.splice(pIndex, 1);
@@ -513,19 +542,14 @@
 
                         if (enemy.health <= 0) {
                             enemies.splice(enemyIndex, 1);
-                            score += enemy.isBoss ? 5 : 1; // 보스 잡으면 5킬 인정
+                            score += enemy.isBoss ? 5 : 1; 
                             document.getElementById('scoreDisplay').innerText = `처치: ${score}`;
 
-                            // 10킬 업그레이드 (보스 등장 턴과 안 겹치게)
                             if (score % 10 === 0 && score !== lastUpgradeScore && score % 30 !== 0) {
-                                lastUpgradeScore = score;
-                                setTimeout(triggerUpgrade, 100);
+                                lastUpgradeScore = score; setTimeout(triggerUpgrade, 100);
                             }
-                            // 30킬 보스 등장
                             if (score >= lastBossScore + 30) {
-                                lastBossScore = score;
-                                lastUpgradeScore = score; // 보스 뜰 땐 업글 스킵
-                                spawnBoss();
+                                lastBossScore = score; lastUpgradeScore = score; spawnBoss();
                             }
                         }
                     }
@@ -533,14 +557,7 @@
             });
         }
 
-        // --- 게임 시작 함수 ---
-        function startGame() {
-            document.getElementById('introScreen').style.display = 'none';
-            gameActive = true;
-            spawnEnemies();
-            animate();
-        }
-
+        function startGame() { gameActive = true; spawnEnemies(); animate(); }
         window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
     </script>
 </body>
