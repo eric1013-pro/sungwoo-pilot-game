@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 웹 서바이벌 슈터 (조이스틱 지원) 🔥</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden; /* 스크롤바 및 모바일 당김 새로고침 방지 */
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        #ui-layer {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            pointer-events: none;
+            z-index: 10;
+        }
+        #scoreDisplay {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f39c12;
+            text-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+        }
+        #healthDisplay {
+            font-size: 20px;
+            color: #e74c3c;
+            margin-top: 10px;
+        }
+        #gameOverScreen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            display: none;
+            z-index: 20;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid #e74c3c;
+        }
+        #gameOverScreen h1 {
+            color: #e74c3c;
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover { background-color: #2980b9; }
+        canvas { display: block; }
+
+        /* 가상 조이스틱 UI 스타일 */
+        #joystick-zone {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            width: 140px;
+            height: 140px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            z-index: 15;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        #joystick-knob {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            background: rgba(52, 152, 219, 0.8);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none; /* 터치 이벤트가 부모(zone)로 통과되도록 함 */
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui-layer">
+        <div id="scoreDisplay">처치: 0</div>
+        <div id="healthDisplay">HP: ❤️❤️❤️</div>
+    </div>
+
+    <!-- 가상 조이스틱 영역 -->
+    <div id="joystick-zone">
+        <div id="joystick-knob"></div>
+    </div>
+
+    <div id="gameOverScreen">
+        <h1>GAME OVER</h1>
+        <p id="finalScore">최종 처치 수: 0</p>
+        <button onclick="location.reload()">다시 시작</button>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const healthDisplay = document.getElementById('healthDisplay');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const finalScore = document.getElementById('finalScore');
+
+        class Player {
+            constructor(x, y, radius, color) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.color = color;
+                this.speed = 6;
+                this.health = 3;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = '#2980b9';
+                ctx.stroke();
+            }
+            update() { this.draw(); }
+        }
+
+        class Projectile {
+            constructor(x, y, radius, color, velocity) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.color = color;
+                this.velocity = velocity;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            update() {
+                this.draw();
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+            }
+        }
+
+        class Enemy {
+            constructor(x, y, radius, color, velocity) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.color = color;
+                this.velocity = velocity;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            update() {
+                this.draw();
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+            }
+        }
+
+        const player = new Player(canvas.width / 2, canvas.height / 2, 20, '#3498db');
+        const projectiles = [];
+        const enemies = [];
+        let score = 0;
+        let animationId;
+        let gameActive = true;
+
+        // --- 조이스틱 로직 설정 ---
+        const joystickZone = document.getElementById('joystick-zone');
+        const joystickKnob = document.getElementById('joystick-knob');
+        let isJoystickActive = false;
+        let joystickVector = { x: 0, y: 0 }; // 방향 벡터 (각 축당 -1 ~ 1)
+        const maxRadius = 70; // 조이스틱이 움직일 수 있는 최대 반경
+        let joystickCenter = { x: 0, y: 0 };
+
+        function updateJoystickCenter() {
+            const rect = joystickZone.getBoundingClientRect();
+            joystickCenter = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+        }
+
+        function handleJoystickMove(clientX, clientY) {
+            let dx = clientX - joystickCenter.x;
+            let dy = clientY - joystickCenter.y;
+            let distance = Math.hypot(dx, dy);
+
+            // 손가락이 조이스틱 밖으로 나가도 최대 반경까지만 knob 이동
+            if (distance > maxRadius) {
+                dx = (dx / distance) * maxRadius;
+                dy = (dy / distance) * maxRadius;
+            }
+
+            // Knob UI 이동
+            joystickKnob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+            
+            // 플레이어 이동 속도 비율 계산
+            joystickVector.x = dx / maxRadius;
+            joystickVector.y = dy / maxRadius;
+        }
+
+        // 터치 이벤트 리스너 (조이스틱 조작)
+        joystickZone.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            isJoystickActive = true;
+            updateJoystickCenter();
+            handleJoystickMove(e.touches[0].clientX, e.touches[0].clientY);
+        });
+        joystickZone.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (isJoystickActive) {
+                handleJoystickMove(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        });
+        joystickZone.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            isJoystickActive = false;
+            joystickKnob.style.transform = `translate(-50%, -50%)`; // 중앙 복귀
+            joystickVector = { x: 0, y: 0 }; // 이동 멈춤
+        });
+
+        // --- WASD 키보드 입력 상태 관리 ---
+        const keys = { w: false, a: false, s: false, d: false };
+        window.addEventListener('keydown', (e) => {
+            if (keys.hasOwnProperty(e.key.toLowerCase())) keys[e.key.toLowerCase()] = true;
+        });
+        window.addEventListener('keyup', (e) => {
+            if (keys.hasOwnProperty(e.key.toLowerCase())) keys[e.key.toLowerCase()] = false;
+        });
+
+        // --- 총알 발사 로직 (마우스 클릭 & 조이스틱 외 화면 터치) ---
+        function shoot(clientX, clientY) {
+            if (!gameActive) return;
+            const angle = Math.atan2(clientY - player.y, clientX - player.x);
+            const velocity = { x: Math.cos(angle) * 12, y: Math.sin(angle) * 12 };
+            projectiles.push(new Projectile(player.x, player.y, 6, '#f1c40f', velocity));
+        }
+
+        window.addEventListener('mousedown', (e) => shoot(e.clientX, e.clientY));
+        
+        window.addEventListener('touchstart', (e) => {
+            // 터치한 곳이 조이스틱 영역이면 총알 발사 취소 (이동만 되게 함)
+            if (e.target === joystickZone || e.target === joystickKnob) return;
+            shoot(e.touches[0].clientX, e.touches[0].clientY);
+        });
+
+        // --- 적 생성 함수 ---
+        function spawnEnemies() {
+            setInterval(() => {
+                if (!gameActive) return;
+                const radius = Math.random() * (30 - 15) + 15;
+                let x, y;
+                if (Math.random() < 0.5) {
+                    x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius;
+                    y = Math.random() * canvas.height;
+                } else {
+                    x = Math.random() * canvas.width;
+                    y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius;
+                }
+                const color = '#e74c3c';
+                const angle = Math.atan2(player.y - y, player.x - x);
+                const velocity = { x: Math.cos(angle) * 2.5, y: Math.sin(angle) * 2.5 };
+                enemies.push(new Enemy(x, y, radius, color, velocity));
+            }, 1000);
+        }
+
+        function updateHealth() {
+            let hpText = "HP: ";
+            for(let i=0; i<player.health; i++) hpText += "❤️";
+            healthDisplay.innerText = hpText;
+            if (player.health <= 0) {
+                gameActive = false;
+                cancelAnimationFrame(animationId);
+                gameOverScreen.style.display = 'block';
+                finalScore.innerText = `최종 처치 수: ${score}`;
+            }
+        }
+
+        // --- 메인 게임 루프 ---
+        function animate() {
+            if (!gameActive) return;
+            animationId = requestAnimationFrame(animate);
+
+            ctx.fillStyle = 'rgba(17, 17, 17, 0.4)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 1. 플레이어 이동 로직 계산 (키보드 또는 조이스틱)
+            let moveX = 0;
+            let moveY = 0;
+
+            if (keys.a) moveX -= 1;
+            if (keys.d) moveX += 1;
+            if (keys.w) moveY -= 1;
+            if (keys.s) moveY += 1;
+
+            if (isJoystickActive) {
+                moveX = joystickVector.x;
+                moveY = joystickVector.y;
+            }
+
+            // 플레이어 위치 업데이트 및 화면 이탈 방지
+            if (player.x + moveX * player.speed - player.radius > 0 && player.x + moveX * player.speed + player.radius < canvas.width) {
+                player.x += moveX * player.speed;
+            }
+            if (player.y + moveY * player.speed - player.radius > 0 && player.y + moveY * player.speed + player.radius < canvas.height) {
+                player.y += moveY * player.speed;
+            }
+
+            player.update();
+
+            // 2. 총알 업데이트
+            projectiles.forEach((projectile, index) => {
+                projectile.update();
+                if (projectile.x + projectile.radius < 0 || projectile.x - projectile.radius > canvas.width || 
+                    projectile.y + projectile.radius < 0 || projectile.y - projectile.radius > canvas.height) {
+                    setTimeout(() => projectiles.splice(index, 1), 0);
+                }
+            });
+
+            // 3. 적 업데이트 및 충돌 판정
+            enemies.forEach((enemy, enemyIndex) => {
+                enemy.update();
+
+                // 적과 플레이어 충돌
+                const distToPlayer = Math.hypot(player.x - enemy.x, player.y - enemy.y);
+                if (distToPlayer - enemy.radius - player.radius < 1) {
+                    enemies.splice(enemyIndex, 1);
+                    player.health -= 1;
+                    updateHealth();
+                    ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                }
+
+                // 적과 총알 충돌
+                projectiles.forEach((projectile, projectileIndex) => {
+                    const distToProjectile = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
+                    if (distToProjectile - enemy.radius - projectile.radius < 1) {
+                        setTimeout(() => {
+                            enemies.splice(enemyIndex, 1);
+                            projectiles.splice(projectileIndex, 1);
+                            score += 1;
+                            scoreDisplay.innerText = `처치: ${score}`;
+                        }, 0);
+                    }
+                });
+            });
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // 리사이즈 시 조이스틱 위치 재계산
+            if (isJoystickActive) updateJoystickCenter(); 
+        });
+
+        spawnEnemies();
+        animate();
+    </script>
+</body>
+</html>
