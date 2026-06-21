@@ -45,7 +45,7 @@
             100% { opacity: 0; transform: scale(1.1); filter: blur(10px); letter-spacing: 30px; }
         }
 
-        /* 🌌 메인 인트로 화면 (순흑색 + 별빛) */
+        /* 🌌 메인 인트로 화면 */
         #introScreen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: #000000;
@@ -54,17 +54,13 @@
             transition: opacity 0.5s;
         }
         
-        /* ✨ 게임 속으로 빨려 들어가는 워프 효과 */
-        .warp-active {
-            animation: warpIn 1.2s cubic-bezier(0.7, 0, 0.3, 1) forwards !important;
-        }
+        .warp-active { animation: warpIn 1.2s cubic-bezier(0.7, 0, 0.3, 1) forwards !important; }
         @keyframes warpIn {
             0% { transform: scale(1); filter: blur(0px); opacity: 1; }
             50% { filter: blur(3px); opacity: 0.8; }
             100% { transform: scale(20); filter: blur(40px); opacity: 0; }
         }
 
-        /* 💰 자발적 후원 문구 */
         .donation-text {
             position: absolute; top: 30px; left: 50%; transform: translateX(-50%);
             color: #aaaaaa; font-size: 1rem; font-weight: 700;
@@ -74,8 +70,7 @@
 
         .intro-title {
             font-family: 'Orbitron', 'Noto Sans KR', sans-serif;
-            font-size: 4.5rem;
-            color: #ffffff;
+            font-size: 4.5rem; color: #ffffff;
             text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
             margin-bottom: 50px;
             animation: floatTitle 3s ease-in-out infinite;
@@ -97,7 +92,6 @@
         #healthDisplay { font-size: 22px; color: #ff0055; margin-top: 10px; }
         #ammoDisplay { font-size: 22px; color: #fff; font-weight: bold; margin-top: 10px; }
 
-        /* 💡 튜토리얼 / 알림 툴팁 */
         #notificationUI {
             position: absolute; top: 25%; left: 50%; transform: translateX(-50%);
             color: #ffd700; font-size: 1.5rem; font-weight: 900; text-align: center;
@@ -167,6 +161,9 @@
 </head>
 <body>
 
+    <!-- 🎵 배경 음악 플레이어 (GitHub에 bgm.mp3 파일을 올리면 자동 재생됩니다) -->
+    <audio id="bgm" src="bgm.mp3" loop></audio>
+
     <!-- 🎬 제작사 인트로 -->
     <div id="studioIntro">
         <div class="logo-text">
@@ -185,7 +182,7 @@
     <div id="ui-layer">
         <div id="scoreDisplay">처치: 0</div>
         <div id="healthDisplay">HP: ❤️❤️❤️</div>
-        <div id="ammoDisplay">탄창: 10 / 10</div>
+        <div id="ammoDisplay">탄창: 30 / 30</div>
     </div>
     
     <!-- 💡 안내 툴팁 -->
@@ -218,12 +215,53 @@
     <canvas id="gameCanvas"></canvas>
 
     <script>
+        // --- 🎵 오디오 시스템 (웹 오디오 API 기반 효과음) ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function initAudio() {
+            if(!audioCtx) audioCtx = new AudioContext();
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            
+            // 브금 재생 (bgm.mp3 파일이 같은 폴더에 있어야 작동함)
+            const bgm = document.getElementById('bgm');
+            bgm.volume = 0.4;
+            bgm.play().catch(e => console.log("BGM 파일(bgm.mp3)이 없거나 브라우저 정책에 의해 차단되었습니다."));
+        }
+
+        // 레이저 발사음
+        function playShootSound() {
+            if(!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.03, audioCtx.currentTime); // 볼륨 낮춤
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        // 타격음 (적격추)
+        function playHitSound() {
+            if(!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.15);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+        }
+
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
 
-        // --- 툴팁(알림) 함수 ---
+        // --- 툴팁(알림) ---
         let notiTimer;
         function showNotification(msg) {
             const noti = document.getElementById('notificationUI');
@@ -246,6 +284,8 @@
         };
 
         function triggerWarp() {
+            initAudio(); // 효과음 & BGM 시스템 가동
+
             const intro = document.getElementById('introScreen');
             intro.classList.add('warp-active');
             
@@ -264,18 +304,14 @@
         // --- 전역 변수 ---
         let score = 0, lastUpgradeScore = 0, lastBossScore = 0;
         let difficultyMultiplier = 1.0;
-        let gameActive = false, isPaused = false;
-        let userHasMoved = false; // 튜토리얼용 변수
+        let gameActive = false, isPaused = false, userHasMoved = false;
 
         // --- 🌌 배경 별빛 시스템 ---
         const stars = [];
         for(let i=0; i<150; i++) {
             stars.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                r: Math.random() * 1.5,
-                alpha: Math.random(),
-                fade: (Math.random() * 0.02) + 0.005
+                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                r: Math.random() * 1.5, alpha: Math.random(), fade: (Math.random() * 0.02) + 0.005
             });
         }
         function drawStars() {
@@ -287,7 +323,6 @@
             });
         }
 
-        // --- 도형 그리기 함수 ---
         function drawPolygon(ctx, x, y, radius, sides, color, rotation) {
             ctx.save(); ctx.translate(x, y); ctx.rotate(rotation);
             ctx.beginPath();
@@ -301,19 +336,21 @@
             ctx.restore();
         }
 
-        // --- 🚀 플레이어 기체 ---
+        // --- 🚀 플레이어 기체 (탄창 30발, 데미지 0.5 밸런스 조정) ---
         class Player {
             constructor(x, y) {
                 this.x = x; this.y = y; this.radius = 20;
                 this.speed = 6; this.health = 3; this.maxHealth = 3;
-                this.damage = 1; this.maxAmmo = 10; this.currentAmmo = 10;
-                this.fireDelay = 200; this.lastShotTime = 0; this.isReloading = false;
+                this.damage = 0.5; // 밸런스 패치: 기본 1.0 -> 0.5
+                this.maxAmmo = 30; // 밸런스 패치: 기본 10 -> 30
+                this.currentAmmo = 30;
+                this.fireDelay = 150; // 연사 속도 약간 상향
+                this.lastShotTime = 0; this.isReloading = false;
                 this.angle = 0; 
-                this.emptyTime = 0; // 자동 재장전 체크용
+                this.emptyTime = 0; 
             }
             draw() {
                 ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
-                // 직관적인 전투기 디자인
                 ctx.beginPath();
                 ctx.moveTo(this.radius * 1.2, 0); 
                 ctx.lineTo(-this.radius * 0.8, this.radius * 0.8); 
@@ -323,7 +360,6 @@
                 ctx.fillStyle = '#111'; ctx.fill();
                 ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.shadowBlur = 10; ctx.shadowColor = '#fff'; ctx.stroke();
                 
-                // 코어 불빛
                 ctx.beginPath(); ctx.arc(-this.radius * 0.1, 0, this.radius * 0.25, 0, Math.PI * 2);
                 ctx.fillStyle = '#00f3ff'; ctx.shadowBlur = 15; ctx.shadowColor = '#00f3ff'; ctx.fill();
                 ctx.restore();
@@ -332,7 +368,7 @@
 
         class Projectile {
             constructor(x, y, velocity, damage) {
-                this.x = x; this.y = y; this.radius = 5;
+                this.x = x; this.y = y; this.radius = 4;
                 this.velocity = velocity; this.damage = damage;
             }
             draw() {
@@ -368,7 +404,7 @@
         const projectiles = [];
         const enemies = [];
 
-        // --- 🔧 스마트 재장전 시스템 ---
+        // --- 🔧 스마트 재장전 ---
         function updateAmmoDisplay() {
             const display = document.getElementById('ammoDisplay');
             if (player.isReloading) { display.innerText = `장전 중...`; display.style.color = "#ff8c00"; }
@@ -383,10 +419,10 @@
 
         function shoot() {
             if (!gameActive || isPaused) return;
-            userHasMoved = true; // 유저 활동 감지
+            userHasMoved = true; 
 
             if (player.currentAmmo <= 0) { 
-                if(!player.isReloading) showNotification(window.innerWidth < 800 ? "재장전(RELOAD) 버튼을 누르세요!" : "탄창이 비었습니다! R키를 누르세요.");
+                if(!player.isReloading) showNotification(window.innerWidth < 800 ? "RELOAD 버튼을 누르세요!" : "탄창이 비었습니다! R키를 누르세요.");
                 return; 
             }
 
@@ -395,20 +431,21 @@
             
             const velocity = { x: Math.cos(player.angle) * 20, y: Math.sin(player.angle) * 20 };
             projectiles.push(new Projectile(player.x, player.y, velocity, player.damage));
+            playShootSound(); // 발사 효과음
             
             player.currentAmmo--; player.lastShotTime = now; 
             updateAmmoDisplay();
 
-            if(player.currentAmmo === 0) player.emptyTime = Date.now(); // 자동 장전 타이머 시작
+            if(player.currentAmmo === 0) player.emptyTime = Date.now(); 
         }
 
-        // --- 업그레이드 & 적 스폰 로직 ---
+        // --- 업그레이드 ---
         const upgrades = [
-            { name: '🔥 블래스터 강화', desc: '총알 데미지 1 상승', apply: () => player.damage += 1 },
-            { name: '📦 탄창 모듈', desc: '최대 탄창 수 +5', apply: () => { player.maxAmmo += 5; player.currentAmmo = player.maxAmmo; } },
-            { name: '⚡ 연사 엔진', desc: '발사 딜레이 감소', apply: () => player.fireDelay = Math.max(50, player.fireDelay - 40) },
+            { name: '🔥 블래스터 강화', desc: '데미지 0.5 상승', apply: () => player.damage += 0.5 },
+            { name: '📦 탄창 모듈', desc: '최대 탄창 수 +15', apply: () => { player.maxAmmo += 15; player.currentAmmo = player.maxAmmo; } },
+            { name: '⚡ 연사 엔진', desc: '발사 딜레이 감소', apply: () => player.fireDelay = Math.max(50, player.fireDelay - 30) },
             { name: '👟 추진기 오버클럭', desc: '이동 속도 증가', apply: () => player.speed += 1.5 },
-            { name: '💖 나노 수리', desc: '체력을 회복합니다', apply: () => { player.health = player.maxHealth; updateHealth(); } }
+            { name: '💖 나노 수리', desc: '체력을 전부 회복합니다', apply: () => { player.health = player.maxHealth; updateHealth(); } }
         ];
 
         function triggerUpgrade() {
@@ -419,7 +456,7 @@
                 const div = document.createElement('div'); div.className = 'upgrade-card';
                 div.innerHTML = `<div class="card-title">${card.name}</div><div class="card-desc">${card.desc}</div>`;
                 div.onclick = () => {
-                    card.apply(); updateAmmoDisplay(); difficultyMultiplier += 0.25; 
+                    card.apply(); updateAmmoDisplay(); difficultyMultiplier += 0.2; 
                     document.getElementById('upgradeModal').style.display = 'none'; isPaused = false;
                 };
                 container.appendChild(div);
@@ -508,8 +545,9 @@
             requestAnimationFrame(animate);
             if (!gameActive || isPaused) return;
 
-            // 배경 및 별빛 렌더링
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // 1. 뿌옇게 변하는 현상 완벽 해결 (캔버스를 검정색으로 매번 완전 초기화)
+            ctx.fillStyle = '#000000'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
             drawStars();
 
             // 💡 자동 재장전 시스템
@@ -546,12 +584,14 @@
                 enemy.update();
                 if (Math.hypot(player.x - enemy.x, player.y - enemy.y) - enemy.radius - player.radius < 1) {
                     enemies.splice(enemyIndex, 1); player.health -= enemy.isBoss ? 2 : 1; 
-                    updateHealth(); ctx.fillStyle = 'rgba(255, 0, 85, 0.4)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    playHitSound(); updateHealth(); 
+                    ctx.fillStyle = 'rgba(255, 0, 85, 0.4)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
                 }
                 projectiles.forEach((p, pIndex) => {
                     if (Math.hypot(p.x - enemy.x, p.y - enemy.y) - enemy.radius - p.radius < 1) {
                         projectiles.splice(pIndex, 1); enemy.health -= p.damage;
                         if (enemy.health <= 0) {
+                            playHitSound(); // 타격 효과음
                             enemies.splice(enemyIndex, 1); score += enemy.isBoss ? 5 : 1; 
                             document.getElementById('scoreDisplay').innerText = `처치: ${score}`;
                             if (score % 10 === 0 && score !== lastUpgradeScore && score % 30 !== 0) {
@@ -570,7 +610,7 @@
             gameActive = true; spawnEnemies(); animate(); 
             // 💡 초보자 튜토리얼
             setTimeout(() => {
-                if(!userHasMoved) showNotification(window.innerWidth < 800 ? "조이스틱을 드래그하여 이동/공격하세요!" : "WASD로 이동하고 마우스로 공격하세요!");
+                if(!userHasMoved) showNotification(window.innerWidth < 800 ? "조이스틱을 조작하고 RELOAD로 장전하세요!" : "WASD 이동, 마우스 공격, R키 장전!");
             }, 4000);
         }
         window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
